@@ -1,0 +1,25 @@
+syntax = "proto3";
+package mon;
+
+service Monitor {
+    rpc Register(Client) returns (RegisterResponse);
+
+    rpc SubmitLog(Log) returns (SubmitLogResponse);
+}
+
+message Client {
+    string id = 1;
+}
+
+message Log {
+    string id = 1;
+    string data = 2;
+}
+
+message RegisterResponse {
+    string status = 1;
+}
+
+message SubmitLogResponse {
+    string status = 1;
+}

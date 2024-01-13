@@ -1,0 +1,35 @@
+[package]
+name = "grpc_client_server"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[[bin]]
+name = "server"
+path = "src/main.rs"
+
+[[bin]]
+name = "client"
+path = "src/client.rs"
+
+[dependencies]
+tonic = "0.8"
+prost = "0.11"
+tokio = { version = "1.24", features = ["macros", "rt-multi-thread"] }
+tokio-stream = { version = "0.1", features = ["net"] }
+futures = "0.3"
+clap = { version = "4.1.4", features = ["derive"] }
+tonic-reflection = "0.6.0"
+log = "0.4"
+env_logger = "0.10"
+sha256 = "1.5"
+notify = "4.0"
+
+[build-dependencies]
+tonic-build = "0.8"
+
+[dev-dependencies]
+uuid = { version = "1.2.2", features = ["v4", "fast-rng"] }
+futures-util = "0.3.25"
+anyhow = "1"
+
