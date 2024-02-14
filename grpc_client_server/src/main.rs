@@ -1,5 +1,5 @@
 use tonic::transport::Server;
-
+use log::info;
 use server::RegisteredClients;
 use mon::monitor_server::MonitorServer;
 
@@ -16,11 +16,12 @@ mod mon_proto {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-   env_logger::init();
+   env_logger::builder().format_timestamp_micros().init();
 
-   let addr = "127.0.0.1:9001".parse()?;
+   let addr = "192.168.122.209:9001".parse()?;
    let clients = RegisteredClients::default();
-
+   
+   info!("server started");
    let reflection_service = tonic_reflection::server::Builder::configure()
            .register_encoded_file_descriptor_set(mon_proto::FILE_DESCRIPTOR_SET)
            .build()

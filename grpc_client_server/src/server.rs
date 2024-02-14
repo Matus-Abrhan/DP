@@ -6,20 +6,20 @@ use std::sync::Arc;
 use tokio::sync::{mpsc, Mutex};
 use tokio_stream::wrappers::UnboundedReceiverStream;
 use tonic::{Request, Response, Status};
-use log::{debug};
+use log::{debug, info};
 
 use crate::mon::monitor_server::Monitor;
-use crate::mon::{Client, RegisterResponse, Log, SubmitLogResponse};
+use crate::mon::{SysmonEvent, RegisterResponse, Client, SubmitLogResponse, Log};
 
 #[derive(Debug)]
 pub struct RegisteredClients {
-    clients: Arc<Mutex<HashMap<String, String>>>,
+    clients: Arc<Mutex<HashMap<String, SysmonEvent>>>,
 }
 
 impl Default for RegisteredClients {
     fn default() -> Self {
         RegisteredClients {
-            clients: Arc::new(Mutex::new(HashMap::<String, String>::new())),
+            clients: Arc::new(Mutex::new(HashMap::<String, SysmonEvent>::new())),
         }
     }
 }
@@ -41,10 +41,10 @@ impl Monitor for RegisteredClients {
         let log = request.into_inner();
         
         {
-        let mut map = self.clients.lock().await;
-        map.entry(log.id).and_modify(|v| *v=log.data.to_owned() ).or_insert(log.data.to_owned());
+            let mut map = self.clients.lock().await;
+            map.entry(log.id).and_modify(|v| *v=log.event.as_ref().unwrap().clone()).or_insert(log.event.as_ref().unwrap().clone());
         }
-        debug!("{:?}", self.clients);
+        debug!("{:?}", log.event);
 
         Ok(Response::new(SubmitLogResponse {
             status: "success".into(),

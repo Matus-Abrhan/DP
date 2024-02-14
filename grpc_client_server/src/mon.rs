@@ -9,8 +9,8 @@ pub struct Client {
 pub struct Log {
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub data: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "2")]
+    pub event: ::core::option::Option<SysmonEvent>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -23,6 +23,88 @@ pub struct RegisterResponse {
 pub struct SubmitLogResponse {
     #[prost(string, tag = "1")]
     pub status: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SysmonEvent {
+    #[prost(message, optional, tag = "1")]
+    pub system: ::core::option::Option<System>,
+    #[prost(message, optional, tag = "2")]
+    pub event_data: ::core::option::Option<EventData>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct System {
+    #[prost(message, optional, tag = "1")]
+    pub provide: ::core::option::Option<Provider>,
+    #[prost(int32, tag = "2")]
+    pub event_id: i32,
+    #[prost(int32, tag = "3")]
+    pub version: i32,
+    #[prost(int32, tag = "4")]
+    pub level: i32,
+    #[prost(int32, tag = "5")]
+    pub task: i32,
+    #[prost(int32, tag = "6")]
+    pub opcode: i32,
+    #[prost(string, tag = "7")]
+    pub keyword: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "8")]
+    pub time_created: ::core::option::Option<TimeCreated>,
+    #[prost(int32, tag = "9")]
+    pub event_record_id: i32,
+    #[prost(string, tag = "10")]
+    pub correlation: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "11")]
+    pub execution: ::core::option::Option<Execution>,
+    #[prost(string, tag = "12")]
+    pub channel: ::prost::alloc::string::String,
+    #[prost(string, tag = "13")]
+    pub computer: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "14")]
+    pub security: ::core::option::Option<Security>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Provider {
+    #[prost(string, tag = "1")]
+    pub name: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub guid: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct TimeCreated {
+    #[prost(string, tag = "1")]
+    pub system_time: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Execution {
+    #[prost(string, tag = "1")]
+    pub process_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub thread_id: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Security {
+    #[prost(string, tag = "1")]
+    pub user_id: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct EventData {
+    #[prost(message, repeated, tag = "1")]
+    pub data: ::prost::alloc::vec::Vec<Data>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Data {
+    #[prost(string, tag = "1")]
+    pub name: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub value: ::prost::alloc::string::String,
 }
 /// Generated client implementations.
 pub mod monitor_client {

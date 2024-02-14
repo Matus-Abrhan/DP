@@ -12,6 +12,10 @@ path = "src/main.rs"
 name = "client"
 path = "src/client.rs"
 
+[[bin]]
+name = "client_win"
+path = "src/client_win.rs"
+
 [dependencies]
 tonic = "0.8"
 prost = "0.11"
@@ -22,8 +26,18 @@ clap = { version = "4.1.4", features = ["derive"] }
 tonic-reflection = "0.6.0"
 log = "0.4"
 env_logger = "0.10"
-sha256 = "1.5"
-notify = "4.0"
+#sha256 = "1.5"
+notify = "6.1.1"
+evtx = "0.8"
+bitflags = "1.0.4"
+lazy_static = "1.2.0"
+serde = "1.0"
+serde_derive = "1.0"
+serde-xml-rs = "0.6.0"
+
+[dependencies.winapi]
+version = "0.3.6"
+features = [ "errhandlingapi", "minwindef", "winnt", "winevt", "libloaderapi", "synchapi", "winbase", "handleapi" ]
 
 [build-dependencies]
 tonic-build = "0.8"
