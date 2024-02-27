@@ -1,0 +1,6 @@
+2019-07-08T15:09:21+00:00 ngatilio#04 I: Start test Test_ASTD_action:3:test_action_of_string_without_args_nor_parenthesis.
+2019-07-08T15:09:21+00:00 ngatilio#04 I: Test Test_ASTD_action:3:test_action_of_string_without_args_nor_parenthesis is successful.
+2019-07-08T15:09:21+00:00 ngatilio#04 I: End test Test_ASTD_action:3:test_action_of_string_without_args_nor_parenthesis.
+2019-07-08T15:09:21+00:00 ngatilio#04 I: Start test Test_ASTD_action:6:test_action_of_string_with_invalid_var_name.
+2019-07-08T15:09:21+00:00 ngatilio#04 I: Test Test_ASTD_action:6:test_action_of_string_with_invalid_var_name is successful.
+2019-07-08T15:09:21+00:00 ngatilio#04 I: End test Test_ASTD_action:6:test_action_of_string_with_invalid_var_name.

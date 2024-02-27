@@ -1,0 +1,2 @@
+print_endline "Guard is x greater than one";
+x > 1

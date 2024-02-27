@@ -1,0 +1,1 @@
+(ipdst = ipdst) && (portdst = "80") && ((Functions.contains msg_req "GET") || (Functions.contains msg_req "POST")) && (Functions.contains msg_hdr "httpbin")

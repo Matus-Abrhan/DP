@@ -1,0 +1,34 @@
+
+(MAIN,
+  <call;
+    called;
+    {
+      p -> 5,
+    }
+  >
+);
+
+(called,
+  <|[]|:;
+    (x, int);
+    [1,10];
+    {e1,};
+    imports:{"Module0.ml",};
+    attributes:{(a,int,0),};
+    <aut;
+      {
+        (s1->elem),
+        (s2->elem),
+      };
+      {
+        ((local,s1,s2), e1(x), {}, "Module0.action_test(a)", false),
+      };
+      {s1,};
+      {s1,};
+      s1
+    >
+  >
+)
+{
+  (p, int) -> {1,2,3,4,5,},
+}

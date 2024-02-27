@@ -1,0 +1,22 @@
+
+(MAIN,
+  <|[]|:;
+    (x, int);
+    { _ };
+    {};
+    imports : { "Module0.ml" };
+    attributes : { (a, string, "request") };
+    (automate_1, 
+      <aut;
+        { (s1->elem), (s2->elem) };
+        {
+          ((local, s1, s2),e1(x),{ file: "GuardIsXGreaterThanOne"},"",false),
+          ((local, s2, s1),e2,{},"",false)
+        };
+        {}; 
+        { s2 }; 
+        s1
+      >
+    )
+  >
+)

@@ -1,0 +1,2 @@
+print_endline ("Guard : 22 == " ^ (string_of_int y));
+y = 22

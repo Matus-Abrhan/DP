@@ -1,0 +1,22 @@
+
+(MAIN,
+  <|[]|:;
+    (x, string);
+    {"test", "test2"};
+    {};
+    imports : { "Module0.ml" };
+    attributes : { (a, string, "request") };
+    (automate_1, 
+      <aut;
+        { (s1->elem), (s2->elem) };
+        {
+          ((local, s1, s2),e1(x),{},"Module0.request(x, a)",false),
+          ((local, s2, s1),e2(x),{ file:"GuardStringTest" },"Module0.print_string_val(a)",false)
+        };
+        {}; 
+        { s2 }; 
+        s1
+      >
+    )
+  >
+)

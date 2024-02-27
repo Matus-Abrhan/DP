@@ -1,0 +1,2 @@
+print_endline ("Guard : 16 == " ^ (string_of_int x));
+x = 16

@@ -1,0 +1,35 @@
+
+(MAIN,
+  <|[]|;
+    {e1,e3};
+    imports: { "synchronized_transitions.ml" };
+    attributes:{ (x, int, 2), (b, int, 0) };
+    <aut;
+      imports:{};
+      attributes:{ (c, int, 0) };
+      { (s1->elem), (s2->elem) };
+      { 
+        ((local, s1, s2), e1, {}, "Synchronized_transitions.first_method(x, b, c)", false),
+        ((local, s2, s1), e2, { file:"GuardIsXGreaterThanOne" }, "Synchronized_transitions.second_method(x, b, c)", false),
+        ((local, s1, s2), e3, { file:"GuardIsCGreaterThanOne" }, "", false)
+      };
+      {};
+      {};
+      s1
+    >;
+    <aut;
+      imports:{};
+      attributes:{ (c, int, 0) };
+      { (s3->elem), (s4->elem) };
+      { 
+        ((local, s3, s4), e1, {}, "", false),
+        ((local, s4, s3), e4, {}, "", false),
+        ((local, s3, s4), e3, {}, "", false)
+      };
+      {};
+      {};
+      s3
+    >
+  >
+)
+

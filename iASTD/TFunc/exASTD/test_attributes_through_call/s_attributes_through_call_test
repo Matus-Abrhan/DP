@@ -1,0 +1,36 @@
+(MAIN,
+  <|[]|:;
+    (x, int);
+    [1,10];
+    {};
+    attributes: { (a, int, 2) };
+    <call;
+      astd2;
+      {
+        qvar -> x,
+        attr -> a
+      }
+    >
+  >
+);
+
+(astd2,
+  <aut;
+    imports:{ "Module0.ml" };
+    {
+      (s1->elem),
+      (s2->elem)
+    };
+    {
+      ((local, s1, s2), e1(qvar, attr), {}, "Module0.inc_by_one(attr)", false),
+      ((local, s2, s1), e2(attr), {}, "", false)
+    };
+    {};
+    {};
+    s1
+  >
+)
+{
+  (qvar, int) -> [1,10],
+  (attr, int) -> [1,10]
+}

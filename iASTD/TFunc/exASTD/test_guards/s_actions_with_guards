@@ -1,0 +1,23 @@
+(MAIN, 
+  <|||:;
+    (x, int);
+    [0, 10];
+    <aut;
+    { 
+      (A1->elem),
+      (A2->elem),
+      (A3->elem)
+    };
+    { 
+      ((local,A1,A2), e1(x), {file : "GuardAlways"}, False),
+      ((local,A2,A3), e2(x), {file : "GuardIsXGreaterThanOne"}, False),
+      ((local,A3,A1), e3(x), {file : "GuardNever"}, False)
+    };
+    { 
+      A3
+    };
+    {};
+    A1
+    >
+  >
+)

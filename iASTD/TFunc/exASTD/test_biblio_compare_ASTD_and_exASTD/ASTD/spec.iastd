@@ -1,0 +1,29 @@
+
+(MAIN, 
+  <|[]|:;
+    book_id;
+    [1, 100];
+    {};
+    <aut;
+      { 
+        (Ready->elem),
+        (Lent->elem),
+        (Returned->elem),
+        (Recycled->elem)
+      };
+      { 
+        ((local,Ready,Lent), Lend(book_id), {}, False),
+        ((local,Lent,Returned), Return(book_id), {}, False),
+        ((local,Returned,Ready), Restore(book_id), {}, False),
+        ((local,Returned,Recycled), Recycle(book_id), {}, False)
+      };
+      { 
+        Recycled
+      };
+      {};
+      Ready
+    >
+  >
+)
+
+
