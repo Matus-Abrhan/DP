@@ -1,0 +1,36 @@
+========================================
+
+Loading from Attack_Specifications/Portscan/portscan.spec
+========================================
+Registered: portscan_seq
+========================================
+Registered: MAIN
+Loading finished
+========================================
+Main structure : 
+QSynchronisation ; Name : MAIN; Var : ipdst; Son : gen_astd_6
+
+   QSynchronisation ; Name : gen_astd_6; Var : portdst; Son : gen_astd_5
+
+      Call ; Name : gen_astd_5; Called : portscan_seq
+
+
+========================================
+========================================
+0.optimisations found
+========================================
+========================================
+Starting state
+
+QSynchronisation_s ,Not_Initial values:  empty domain
+
+========================================
+Alert Portscan attack
+no more event to execute
+
+0.105444192886 seconds of READING
+0. seconds of Kappa indirect static analysis
+0.113132715225 seconds of EXECUTION
+for 300 events
+0.000377109050751 seconds of treatement per instruction
+

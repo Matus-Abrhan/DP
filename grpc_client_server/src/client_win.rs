@@ -5,8 +5,8 @@ pub mod query_list;
 use crate::query_list::{EventFilter, Condition, QueryList, Comparison, Query, QueryItem};
 
 use std::thread::sleep;
-use std::time::Duration;
-use log::{debug, info, warn, error};
+use std::time::{Duration, Instant};
+use log::{debug, info};
 
 pub mod mon;
 use mon::monitor_client::MonitorClient;
@@ -32,10 +32,10 @@ fn transform(event: event_log::sysmon_struct::SysmonEvent) -> mon::SysmonEvent {
     let security = mon::Security{ user_id: event.System.Security.UserID }; 
 
     let system = mon::System{ 
-        provide: Some(provider), event_id: event_id, version: version, level: level,
-        task: task, opcode: opcode, keyword: keyword, time_created: Some(time_created),
-        event_record_id: event_record_id, correlation: correlation, execution: Some(execution),
-        channel: channel, computer: computer, security: Some(security)};
+        provide: Some(provider), event_id, version, level,
+        task, opcode, keyword, time_created: Some(time_created),
+        event_record_id, correlation, execution: Some(execution),
+        channel, computer, security: Some(security)};
     
     let mut event_data: Vec<mon::Data> = Vec::new();
 
@@ -43,9 +43,8 @@ fn transform(event: event_log::sysmon_struct::SysmonEvent) -> mon::SysmonEvent {
         event_data.push(mon::Data{ name: d.Name, value: d.value })
     }
     
-    let result = mon::SysmonEvent{ system: Some(system), event_data: Some(mon::EventData{ data: event_data}) }; 
-
-    return result;
+    let sysmon_event = mon::SysmonEvent{ system: Some(system), event_data: Some(mon::EventData{ data: event_data}) }; 
+    return sysmon_event;
 }
 
 #[tokio::main]
@@ -68,7 +67,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         )
         .build();
 
-    let mut client = MonitorClient::connect("http://192.168.122.209:9001").await?;
+    let mut client = MonitorClient::connect("http://192.168.122.31:9001").await?;
     match event_log::subscriber::WinEventsSubscriber::get(query) {
         Ok(mut events) => {
             while let Some(event) = events.next() {
@@ -78,12 +77,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             info!("Client started with ID: {:?}", id);
             loop {
                 while let Some(event) = events.next() {
+                    let start = Instant::now();
                     let parsed: event_log::sysmon_struct::SysmonEvent = event.into();
+                    info!("{:?}", parsed);
                     let rpc: mon::SysmonEvent = transform(parsed);
                     debug!("sending request");
-                    let request = tonic::Request::new(mon::Log{ id: id, event: Some(rpc) });
+                    let request = tonic::Request::new(mon::Log{ id: id.clone(), event: Some(rpc) });
                     let response = client.submit_log(request).await?;
                     debug!("{:?}", response.into_inner());
+                    info!("{:?}", start.elapsed())
                 }
                 sleep(Duration::from_millis(1000));
             }

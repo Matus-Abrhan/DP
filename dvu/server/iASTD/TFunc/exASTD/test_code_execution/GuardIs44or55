@@ -1,0 +1,2 @@
+print_endline ("Guard : 44 or 55 == " ^ (string_of_int y));
+y = 44 || y = 55

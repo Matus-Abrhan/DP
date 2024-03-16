@@ -1,0 +1,6 @@
+2019-07-08T15:09:21+00:00 ngatilio#03 I: Start test Test_ASTD_action:2:test_action_of_string_empty.
+2019-07-08T15:09:21+00:00 ngatilio#03 I: Test Test_ASTD_action:2:test_action_of_string_empty is successful.
+2019-07-08T15:09:21+00:00 ngatilio#03 I: End test Test_ASTD_action:2:test_action_of_string_empty.
+2019-07-08T15:09:21+00:00 ngatilio#03 I: Start test Test_ASTD_action:5:test_action_of_string_with_some_unref_args.
+2019-07-08T15:09:21+00:00 ngatilio#03 I: Test Test_ASTD_action:5:test_action_of_string_with_some_unref_args is successful.
+2019-07-08T15:09:21+00:00 ngatilio#03 I: End test Test_ASTD_action:5:test_action_of_string_with_some_unref_args.

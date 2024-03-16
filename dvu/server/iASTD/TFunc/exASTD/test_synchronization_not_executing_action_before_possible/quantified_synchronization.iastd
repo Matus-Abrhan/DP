@@ -1,0 +1,22 @@
+
+(MAIN,
+  <|[]|:;
+    (x, int);
+    { 1, 2, 3 };
+    { e1 };
+    imports: { "functions.ml" };
+    <aut;
+      {
+        (s1 -> elem),
+        (s2 -> elem)
+      };
+      {
+        ((local, s1, s2), e1, { file : "valid_if_x_not_2" }, "Functions.apply_side_effect()", false),
+        ((local, s1, s2), e2, { file : "side_effect_shouldnt_be_applied" }, "", false)
+      };
+      {};
+      {};
+      s1
+    >
+  >
+)

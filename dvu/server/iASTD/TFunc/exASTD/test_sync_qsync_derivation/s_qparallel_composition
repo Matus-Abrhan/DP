@@ -1,0 +1,23 @@
+(MAIN,
+  <||:;
+    (x, int);
+    [1,10];
+    <aut; 
+    { 
+      (s1->elem), 
+      (s2->elem),
+      (s3->elem)
+    }; 
+    { 
+      ((local, s1, s2), e1, {}, "", False),
+      ((local, s2, s3), e2(x), {}, "", False),
+      ((local, s2, s1), e3, {}, "", False)
+    }; 
+    {}; 
+    { 
+      s2 
+    }; 
+    s1
+    >
+  >
+)

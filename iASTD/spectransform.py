@@ -17,12 +17,12 @@ class SpecTransformer:
         def transform (self, spec, onto_types):
              spec_ = spec
              splitter=""
-             for type, attribute in onto_types.iteritems():
+             for type, attribute in onto_types.items():
                  pattern = re.compile(r"([a-zA-Z]+[a-zA-Z0-9_]*)\(\?([a-zA-Z]+[a-zA-Z0-9_]*)\:"+type+"\)")
                  for (event_label, variable) in re.findall(pattern, spec_):
 
                     event_params = ''
-                    for var_attribute, var_type in attribute.iteritems():
+                    for var_attribute, var_type in attribute.items():
                         if self.INT_CONST in var_type:
                            event_params = event_params + '?' + var_attribute + ':' + self.INT_CONST + ','
                         else:
@@ -69,7 +69,7 @@ if __name__ == "__main__":
             print("python spectransform.py spec_location")
         else:
             ymlfile = "config.yaml"
-            cfg = yaml.load(open(ymlfile, "r"))
+            cfg = yaml.safe_load(open(ymlfile, "r"))
             PATH = cfg['CONFIGS']['ONTOLOGY_CONFIGS']['FEED_CHANNELS']['channel1']['target']
             if PATH:
                st = SpecTransformer()

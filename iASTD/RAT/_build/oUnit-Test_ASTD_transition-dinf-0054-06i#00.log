@@ -1,0 +1,71 @@
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Runner: processes
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Chooser: simple
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Configuration suite_name = "Test_ASTD_transition"
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Configuration cache_filename = "/home/local/USHERBROOKE/ngal1802/Bureau/cse-astd/Tools/iASTD/_build/oUnit-$(suite_name).cache"
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Configuration display = "true"
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Configuration results_style_1_X = "false"
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Configuration verbose = "false"
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Configuration health_check_interval = "1."
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Configuration testdata_dir = "none"
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Configuration chooser = "simple"
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Configuration output_html_dir = "none"
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Configuration processes_kill_period = "5."
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Configuration runner = "processes"
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Configuration shards = "4"
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Configuration processes_grace_period = "5."
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Configuration log_encoding = "utf-8"
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Configuration output_junit_file = "none"
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Configuration output_file = "/home/local/USHERBROOKE/ngal1802/Bureau/cse-astd/Tools/iASTD/_build/oUnit-$(suite_name)-$(shard_id).log"
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Using 4 workers maximum.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Starting worker number dinf-0054-06i#01.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Worker dinf-0054-06i#01 started.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Starting worker number dinf-0054-06i#02.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Worker dinf-0054-06i#02 started.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Starting worker number dinf-0054-06i#03.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Worker dinf-0054-06i#03 started.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Still 3 tests running : Test_ASTD_transition:2:test_is_transition_valid_for_event_event_count_mismatch, Test_ASTD_transition:1:test_is_transition_valid_for_event_label_mismatch, Test_ASTD_transition:0:test_is_transition_valid_for_event.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: 3 tests running: Test_ASTD_transition:2:test_is_transition_valid_for_event_event_count_mismatch, Test_ASTD_transition:1:test_is_transition_valid_for_event_label_mismatch, Test_ASTD_transition:0:test_is_transition_valid_for_event.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#01 I: Start test Test_ASTD_transition:0:test_is_transition_valid_for_event.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Still 3 tests running : Test_ASTD_transition:2:test_is_transition_valid_for_event_event_count_mismatch, Test_ASTD_transition:1:test_is_transition_valid_for_event_label_mismatch, Test_ASTD_transition:0:test_is_transition_valid_for_event.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: 3 tests running: Test_ASTD_transition:2:test_is_transition_valid_for_event_event_count_mismatch, Test_ASTD_transition:1:test_is_transition_valid_for_event_label_mismatch, Test_ASTD_transition:0:test_is_transition_valid_for_event.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#02 I: Start test Test_ASTD_transition:1:test_is_transition_valid_for_event_label_mismatch.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#03 I: Start test Test_ASTD_transition:2:test_is_transition_valid_for_event_event_count_mismatch.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Still 3 tests running : Test_ASTD_transition:2:test_is_transition_valid_for_event_event_count_mismatch, Test_ASTD_transition:1:test_is_transition_valid_for_event_label_mismatch, Test_ASTD_transition:0:test_is_transition_valid_for_event.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: 3 tests running: Test_ASTD_transition:2:test_is_transition_valid_for_event_event_count_mismatch, Test_ASTD_transition:1:test_is_transition_valid_for_event_label_mismatch, Test_ASTD_transition:0:test_is_transition_valid_for_event.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#01 I: Test Test_ASTD_transition:0:test_is_transition_valid_for_event is successful.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Still 3 tests running : Test_ASTD_transition:2:test_is_transition_valid_for_event_event_count_mismatch, Test_ASTD_transition:1:test_is_transition_valid_for_event_label_mismatch, Test_ASTD_transition:0:test_is_transition_valid_for_event.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: 3 tests running: Test_ASTD_transition:2:test_is_transition_valid_for_event_event_count_mismatch, Test_ASTD_transition:1:test_is_transition_valid_for_event_label_mismatch, Test_ASTD_transition:0:test_is_transition_valid_for_event.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#01 I: End test Test_ASTD_transition:0:test_is_transition_valid_for_event.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Still 3 tests running : Test_ASTD_transition:2:test_is_transition_valid_for_event_event_count_mismatch, Test_ASTD_transition:1:test_is_transition_valid_for_event_label_mismatch, Test_ASTD_transition:0:test_is_transition_valid_for_event.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: 3 tests running: Test_ASTD_transition:2:test_is_transition_valid_for_event_event_count_mismatch, Test_ASTD_transition:1:test_is_transition_valid_for_event_label_mismatch, Test_ASTD_transition:0:test_is_transition_valid_for_event.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Still 2 tests running : Test_ASTD_transition:2:test_is_transition_valid_for_event_event_count_mismatch, Test_ASTD_transition:1:test_is_transition_valid_for_event_label_mismatch.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: 2 tests running: Test_ASTD_transition:2:test_is_transition_valid_for_event_event_count_mismatch, Test_ASTD_transition:1:test_is_transition_valid_for_event_label_mismatch.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#02 I: Test Test_ASTD_transition:1:test_is_transition_valid_for_event_label_mismatch is successful.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#03 I: Test Test_ASTD_transition:2:test_is_transition_valid_for_event_event_count_mismatch is successful.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Still 2 tests running : Test_ASTD_transition:2:test_is_transition_valid_for_event_event_count_mismatch, Test_ASTD_transition:1:test_is_transition_valid_for_event_label_mismatch.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: 2 tests running: Test_ASTD_transition:2:test_is_transition_valid_for_event_event_count_mismatch, Test_ASTD_transition:1:test_is_transition_valid_for_event_label_mismatch.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#02 I: End test Test_ASTD_transition:1:test_is_transition_valid_for_event_label_mismatch.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#03 I: End test Test_ASTD_transition:2:test_is_transition_valid_for_event_event_count_mismatch.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Still 2 tests running : Test_ASTD_transition:2:test_is_transition_valid_for_event_event_count_mismatch, Test_ASTD_transition:1:test_is_transition_valid_for_event_label_mismatch.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: 2 tests running: Test_ASTD_transition:2:test_is_transition_valid_for_event_event_count_mismatch, Test_ASTD_transition:1:test_is_transition_valid_for_event_label_mismatch.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: 0 tests running: .
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Worker dinf-0054-06i#01 has ended.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Worker dinf-0054-06i#02 has ended.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Worker dinf-0054-06i#03 has ended.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Used 3 worker during test execution.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Run 1 tests with shard dinf-0054-06i#02.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Run 1 tests with shard dinf-0054-06i#01.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Run 1 tests with shard dinf-0054-06i#03.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: ==============
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Summary:
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Test Test_ASTD_transition:2:test_is_transition_valid_for_event_event_count_mismatch is successful.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Test Test_ASTD_transition:1:test_is_transition_valid_for_event_label_mismatch is successful.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Test Test_ASTD_transition:0:test_is_transition_valid_for_event is successful.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Ran: 3 tests in: 0.10 seconds.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Cases: 3.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Tried: 3.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Errors: 0.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Failures: 0.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Skip: 0.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Todo: 0.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#00 I: Timeout: 0.

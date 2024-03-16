@@ -1,0 +1,33 @@
+(MAIN, 
+  <|[]|:;
+    (book_id, int);
+    [1, 100];
+    {};
+    imports : {
+      "BookLogic.ml"
+    };
+    <=>;
+      { file: "GuardBookIdIsEven" };
+      <aut;
+        attributes : {
+          (loan_count, int, 0)
+        };
+        { 
+          (BookAvailableState->elem),
+          (BookLentState->elem),
+          (BookUnavailableState->elem)
+        };
+        { 
+          ((local,BookAvailableState,BookLentState), Lend(book_id), {}, "BookLogic.lend_book(book_id, loan_count)", False),
+          ((local,BookLentState,BookUnavailableState), Return(book_id), {}, "BookLogic.return_book(book_id, loan_count)", False),
+          ((local,BookUnavailableState,BookAvailableState), Reinit(book_id), {}, False)
+        };
+        { 
+          BookUnavailableState
+        };
+        {};
+        BookAvailableState
+      >
+    >
+  >
+)

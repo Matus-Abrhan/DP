@@ -43,7 +43,7 @@ CONFIGS:
     # Server settings used by xASTD HIDS
     SERVER_CONFIGS:
         HOST: 0.0.0.0 # broadcast address that accepts all connections from clients
-        PORT: 9092 # reception port for data gathering
+        PORT: 9093 # reception port for data gathering
         POLL_INTERVALL_MILLSECS: 500 # time period before the next poll starts
     # connexion settings to read attack specifications in real-time
     SPECIFICATION_CONFIGS:

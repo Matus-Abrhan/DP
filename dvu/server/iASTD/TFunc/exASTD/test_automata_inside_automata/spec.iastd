@@ -1,0 +1,71 @@
+
+(MAIN,
+  <aut;
+    {
+      (a2 -> elem),
+      (a1 ->
+        <aut;
+          imports: { "functions.ml" };
+          {
+            (s0 -> elem),
+            (s1 -> elem),
+            (aut1 ->
+              <aut;
+                {
+                  (ss1 -> elem),
+                  (ss2 -> elem)
+                };
+                {
+                  ((local, ss1, ss2), e5(), {}, "", false)
+                };
+                { ss2 };
+                {};
+                ss1
+              >
+            ),
+            (aut2 ->
+              <aut;
+                attributes: { (count, int, 0) };
+                code: "Functions.increment(count)";
+                {
+                  (ss3 -> elem),
+                  (ss4 -> elem)
+                };
+                {
+                  ((local, ss3, ss4), e6(), {}, "", false),
+                  ((local, ss4, ss3), e14(), {}, "", true),
+                  ((local, ss4, ss3), e15(), { file:"countBiggerThan1" }, "", false)
+                };
+                { ss4 };
+                {};
+                ss3
+              >
+            )
+          };
+          {
+            ((local, s0, aut1), e1(), {}, "", false),
+            ((local, s0, aut2), e3(), {}, "", false),
+            ((local, aut2, aut1), e9(), {}, "", true),
+            ((local, s1, s0), e12(), {}, "", false),
+            ((to_sub, s0, aut1, ss1), e2(), {}, "", false),
+            ((to_sub, s0, aut2, ss3), e4(), {}, "", false),
+            ((to_sub, aut2, aut1, ss2), e10(), {}, "", true),
+            ((to_sub, s1, aut2, H2), e8(), {}, "", false),
+            ((to_sub, s1, aut2, H1), e13(), {}, "", false),
+            ((from_sub, aut1, ss2, s0), e11(), {}, "", false),
+            ((from_sub, aut2, ss4, s1), e7(), {}, "", false)
+          };
+          { s1 };
+          { aut2 };
+          s0
+        >
+      )
+    };
+    {
+      ((local, a1, a2), e16(), {}, "", true)
+    };
+    { a2 };
+    {};
+    a1
+  >
+)

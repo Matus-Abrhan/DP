@@ -1,0 +1,6 @@
+2018-06-18T09:07:13+00:00 dinf-0054-06i#01 I: Start test Test_ASTD_action:0:test_action_of_string_with_args.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#01 I: Test Test_ASTD_action:0:test_action_of_string_with_args is successful.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#01 I: End test Test_ASTD_action:0:test_action_of_string_with_args.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#01 I: Start test Test_ASTD_action:4:test_action_of_string_with_unref_args.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#01 I: Test Test_ASTD_action:4:test_action_of_string_with_unref_args is successful.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#01 I: End test Test_ASTD_action:4:test_action_of_string_with_unref_args.

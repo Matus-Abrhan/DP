@@ -1,0 +1,52 @@
+========================================
+
+Loading from Attack_Specifications/RAT/rat.spec
+========================================
+Registered: portscan_seq
+========================================
+Registered: exploit_seq
+========================================
+Registered: MAIN
+Loading finished
+========================================
+Main structure : 
+ Sequence ; Name : MAIN; Son 1 : recon_phase; Son 2 : exploit_phase
+
+   QSynchronisation ; Name : recon_phase; Var : ipdst; Son : gen_astd_10
+
+      QSynchronisation ; Name : gen_astd_10; Var : portdst; Son : gen_astd_9
+
+         Call ; Name : gen_astd_9; Called : portscan_seq
+
+   Guard ; Name : exploit_phase; Son : gen_astd_14
+
+      QSynchronisation ; Name : gen_astd_14; Var : ipsrc; Son : gen_astd_13
+
+         QSynchronisation ; Name : gen_astd_13; Var : ipdst; Son : gen_astd_12
+
+            Call ; Name : gen_astd_12; Called : exploit_seq
+
+
+========================================
+========================================
+0.optimisations found
+========================================
+========================================
+Starting state
+
+Sequence_s ,
+step : First
+
+   QSynchronisation_s ,Not_Initial values:  empty domain
+
+========================================
+Alert Portscan attack
+Alert Metasploit Privilege Escalation
+no more event to execute
+
+0.0995419025421 seconds of READING
+0. seconds of Kappa indirect static analysis
+0.106206893921 seconds of EXECUTION
+for 298 events
+0.000356398972889 seconds of treatement per instruction
+

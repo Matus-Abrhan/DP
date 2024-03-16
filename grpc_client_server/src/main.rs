@@ -18,7 +18,7 @@ mod mon_proto {
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
    env_logger::builder().format_timestamp_micros().init();
 
-   let addr = "192.168.122.209:9001".parse()?;
+   let addr = "0.0.0.0:9001".parse()?;
    let clients = RegisteredClients::default();
    
    info!("server started");

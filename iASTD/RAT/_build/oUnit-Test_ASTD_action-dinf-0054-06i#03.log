@@ -1,0 +1,6 @@
+2018-06-18T09:07:13+00:00 dinf-0054-06i#03 I: Start test Test_ASTD_action:2:test_action_of_string_empty.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#03 I: Test Test_ASTD_action:2:test_action_of_string_empty is successful.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#03 I: End test Test_ASTD_action:2:test_action_of_string_empty.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#03 I: Start test Test_ASTD_action:6:test_action_of_string_with_invalid_var_name.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#03 I: Test Test_ASTD_action:6:test_action_of_string_with_invalid_var_name is successful.
+2018-06-18T09:07:13+00:00 dinf-0054-06i#03 I: End test Test_ASTD_action:6:test_action_of_string_with_invalid_var_name.

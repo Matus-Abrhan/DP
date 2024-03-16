@@ -1,0 +1,2 @@
+print_endline ("guard : " ^ a ^ " ?= response : " ^ (string_of_bool (a = "response")));
+a = "response"

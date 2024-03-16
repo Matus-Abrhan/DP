@@ -1,0 +1,32 @@
+
+(MAIN,
+  <|[]|;
+    { e1 };
+    imports: { "functions.ml" };
+    <aut;
+      {
+        (s1 -> elem),
+        (s2 -> elem)
+      };
+      {
+        ((local, s1, s2), e1, {}, "Functions.apply_side_effect()", false),
+        ((local, s1, s2), e2, { file : "side_effect_shouldnt_be_applied" }, "", false)
+      };
+      {};
+      {};
+      s1
+    >;
+    <aut;
+      {
+        (s3 -> elem),
+        (s4 -> elem)
+      };
+      {
+        ((local, s3, s4), e1, { file: "false" }, "Functions.apply_side_effect()", false)
+      };
+      {};
+      {};
+      s3
+    >
+  >
+)

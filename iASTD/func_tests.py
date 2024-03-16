@@ -120,7 +120,7 @@ for count, test in enumerate(tests):
         print("Test #{count} passed!".format(**locals()))
     else:
         all_tests_passed = False
-        print ("""
+        print("""
 Test #{count} failed with :
 s = {test[0]}
 i = {test[1]}
@@ -129,5 +129,5 @@ nb_not_possible_events = expected : {expected_nb_not_possible_events} actual : {
 nb_errors =              expected : {expected_nb_errors} actual : {actual_nb_errors}
 """.format(**locals()))
 
-print
+print()
 print("Good Boy!" if all_tests_passed else "BAD BOY ...")

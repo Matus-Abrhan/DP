@@ -1,0 +1,33 @@
+
+(MAIN,
+  <|||:;
+    (book_id, int);
+    [1,100];
+    imports: { "BookLogic.ml" };
+    attributes : { (max_loan_threshold, int, 1) };
+    <aut;
+      attributes : {
+        (loan_count, int, 0),
+        (interactions_with_book, int, 0)
+      };
+      code : "BookLogic.interact_with_book(interactions_with_book)";
+      {
+        (Ready->elem),
+        (Lent->elem),
+        (Returned->elem),
+        (Recycled->elem)
+      };
+      {
+        ((local, Ready, Lent), Lend(book_id), {}, "BookLogic.lend_book(book_id, loan_count)", false),
+        ((local, Lent, Returned), Return(book_id), {}, "BookLogic.return_book(book_id)", false),
+        ((local, Returned, Ready), Restore(book_id), { file:"can_book_be_restored" }, false),
+        ((local, Returned, Recycled), Recycle(book_id), {}, "BookLogic.print_number_interactions_with_book(book_id, !interactions_with_book)", false)
+      };
+      {
+        Recycled
+      };
+      {};
+      Ready
+    >
+  >
+)
