@@ -1,3 +1,0 @@
-let is_side_effect_applied = Functions.is_side_effect_applied () in
-  print_endline ("Side effect applied : " ^ (string_of_bool is_side_effect_applied));
-  not (is_side_effect_applied)
