@@ -8,6 +8,9 @@ import Evtx.Evtx as evtx  # pip3 install python-evtx
 import xmltodict  # pip3 install xmltodict
 from collections import OrderedDict
 
+# from utils import AESCypher
+from general.utils import AESCypher
+
 
 class xASTD_hcap_client:
     BUFFER_MAX_SIZE = 1024
@@ -111,16 +114,6 @@ class xASTD_hcap_client:
                 except Exception as e:
                     print("ERROR: Sending to "+str(sys.argv[1])+" failed !!")
                     print(e)
-
-
-class AESCypher:
-
-    ENCRYPT_KEY = 'HKLlbF514I09oYcv'
-
-    def encrypt(self, msg: str) -> bytes:
-        # aes = pyaes.AESModeOfOperationCTR(self.ENCRYPT_KEY)
-        # return aes.decrypt(msg)
-        return bytes(msg, encoding='utf-8')
 
 
 if __name__ == "__main__":

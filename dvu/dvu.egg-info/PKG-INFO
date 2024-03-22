@@ -1,0 +1,6 @@
+Metadata-Version: 2.1
+Name: dvu
+Version: 1.0
+Requires-Dist: PyYAML
+Requires-Dist: pexpect
+Requires-Dist: pytest
