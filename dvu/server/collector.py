@@ -1,8 +1,11 @@
 import logging
+from typing import List, Optional, Generator
 import socketserver
 import json
+from enum import Enum
 from functools import partial
-from multiprocessing import Queue
+from multiprocessing import Process, Queue
+from contextlib import contextmanager
 from time import sleep
 
 from general.utils import AESCypher
@@ -10,11 +13,17 @@ from general.utils import AESCypher
 logger = logging.getLogger(__name__)
 
 
+class RequestIdentifier(Enum):
+    RAW = 'raw'
+    WIN_EVENT = 'winevt'
+    EXIT = 'exit'
+
+
 class RequestHandler(socketserver.BaseRequestHandler):
-    def __init__(self, onto_prim_types, queue, *args, **kwargs):
-        self.onto_prim_types = onto_prim_types
-        self.queue = queue
-        super().__init__(*args, **kwargs)
+    # def __init__(self, onto_prim_types, queue, *args, **kwargs):
+    #    self.onto_prim_types = onto_prim_types
+    #    self.queue = queue
+    #    super().__init__(*args, **kwargs)
 
     def handle(self) -> None:
         logger.debug(f'Handling request {self.request}')
@@ -23,46 +32,70 @@ class RequestHandler(socketserver.BaseRequestHandler):
         request = crypto.decrypt(enc_request)
         client_addr = self.client_address[0]
         (iden, data) = request.split('#')
+        identifier: RequestIdentifier = RequestIdentifier(iden)
         # Sysmon events
-        if iden == "winevt":
-            event = Collector.parse_win_event()
+        if identifier is RequestIdentifier.WIN_EVENT:
+            event = Collector.parse_win_event(
+                self.server.onto_prim_types,
+                data)
+            logger.debug(f'writeing to queue: {event}')
+            self.server.queue.put((client_addr, event))
 
-        # NOTE: for testing purposes
-        elif iden == "raw":
+        elif identifier is RequestIdentifier.RAW:
             logger.debug(f'writeing to queue: {data}')
-            self.queue.put((client_addr, data))
+            self.server.queue.put((client_addr, data))
 
-        elif iden == "exit":
+        elif identifier is RequestIdentifier.EXIT:
             logger.debug("Server shutting down")
             self.server.shutdown()
 
 
-class Collector:
-    def __init__(self, onto_prim_types):
+class CustomServer(socketserver.ThreadingUDPServer):
+    def __init__(self, onto_prim_types, queue, *args, **kwargs):
         self.onto_prim_types = onto_prim_types
+        self.queue = queue
+        super().__init__(*args, **kwargs)
 
-    # @staticmethod
-    def start_collection(onto_prim_types,
-                         request_queue: Queue,
-                         host: str = '0.0.0.0',
-                         port: int = 9001) -> None:
+
+class Collector:
+    def __init__(self, onto_prim_types: List[str], request_queue: Queue):
+        self.onto_prim_types: List[str] = onto_prim_types
+        self.request_queue: Queue = request_queue
+        self.started: bool = True
+        self.server_process: Optional[Process] = None
+
+    def _start_collection(self,
+                          host: str = '0.0.0.0',
+                          port: int = 9001) -> None:
         print(f'Starting cap server {host}, {port}')
         logger.info(f'Starting cap server {host}, {port}')
-        handler = partial(
-            RequestHandler, onto_prim_types, request_queue
-        )
 
-        with socketserver.UDPServer((host, port), handler) as server:
-            # TODO: On specific request stop server
-            server.serve_forever()
+        Server = partial(
+            CustomServer, self.onto_prim_types, self.request_queue)
+        with Server((host, port), RequestHandler) as server:
+            self.server_process = Process(target=server.serve_forever)
+            self.server_process.start()
+            if self.server_process.is_alive():
+                self.started = True
 
-    def is_running(self):
-        # TODO: Implement correct startup check
-        pass
+    @contextmanager
+    def cm(self):
+        self._start_collection()
+        sleep(.1)
+        yield self
 
-    def quit(self):
-        # TODO: implement context manager and cleanup
-        pass
+        self._quit()
+
+    def is_running(self) -> bool:
+        alive = False
+        if isinstance(self.server_process, Process):
+            alive = self.server_process.is_alive()
+        return self.started and alive
+
+    def _quit(self) -> None:
+        if isinstance(self.server_process, Process):
+            self.server_process.kill()
+        self.started = False
 
     @staticmethod
     def parse_win_event(data, onto_prim_types) -> str:

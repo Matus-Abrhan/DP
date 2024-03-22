@@ -22,12 +22,11 @@ class Spec(Enum):
 
 class iASTD():
     _EXPECT: str = 'Enter action :'
-    _IASTD_DIR: Path = SERVER_DIR / Path('./iASTD/iASTD')
+    _IASTD_BIN: Path = SERVER_DIR / Path('./iASTD/iASTD')
 
     def __init__(self, spec: Spec) -> None:
-        self.bin: Path = self._IASTD_DIR
-        if not self.bin.exists():
-            raise OSError(f'Binsty {self.bin} does not exist')
+        if not self._IASTD_BIN.exists():
+            raise OSError(f'Binsty {self._IASTD_BIN} does not exist')
         spec_path = SERVER_DIR / spec.value
         if not spec_path.exists():
             raise OSError(f'Spec {spec_path} does not exist')
@@ -37,8 +36,8 @@ class iASTD():
         self.spec_file: Path = spec_path.absolute()
         self.spec_dir: Path = self.spec_file.parent
 
-        command = " ".join([str(self.bin), '-s', str(self.spec_file)])
-        self.app_instance = spawn(command, cwd=self.bin.parent)
+        command = " ".join([str(self._IASTD_BIN), '-s', str(self.spec_file)])
+        self.app_instance = spawn(command, cwd=self._IASTD_BIN.parent)
         _ = self._read_stdout()
         logger.info(f'Started: {self}')
 
