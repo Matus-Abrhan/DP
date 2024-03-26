@@ -5,6 +5,7 @@ import logging
 from time import sleep
 
 from general.utils import SERVER_DIR
+from server.wrapper_iASTD import Spec
 
 logger = logging.getLogger(__name__)
 
@@ -13,10 +14,11 @@ class echoShell:
     _EXPECT: str = 'prompt# '
     _ECHO_SHELL_BIN: Path = SERVER_DIR / Path('./iASTD/echoShell')
 
-    def __init__(self):
+    def __init__(self, spec: Spec):
+        self.spec = spec
         self.app_instance = spawn(str(self._ECHO_SHELL_BIN))
-        logger.info(self._read_stdout())
-        logger.info('Started')
+        self._read_stdout()
+        logger.debug(self)
 
     def is_running(self) -> bool:
         return self.app_instance.isalive()
@@ -38,3 +40,6 @@ class echoShell:
         self.app_instance.expect(self._EXPECT)
         data = self.app_instance.before
         return data
+
+    def __repr__(self) -> str:
+        return f'echoShell(spec={self.spec}, alive={self.is_running()})'

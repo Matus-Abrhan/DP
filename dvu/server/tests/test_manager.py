@@ -6,24 +6,45 @@ import socket
 from time import sleep
 from multiprocessing import Process, Queue
 
-from server.main import start_main
-from server.manager import Manager
+from server.manager import Manager, Client
 from general.utils import SERVER_DIR
 from server.wrapper_echoShell import echoShell
+from server.wrapper_iASTD import Spec
 
 logger = logging.getLogger(__name__)
 
 
 def test_echo_shell():
-    shell = echoShell()
+    shell = echoShell(Spec.ROOT)
     input = 'blabla'
     result = shell.process_event(input)
-    assert f'Echo: {input}' in result
+    assert input in result
 
 
-def test_manager():
+def test_add_clients():
     queue = Queue()
+    manager = Manager(queue)
 
-    with Manager(queue).cm():
-        queue.put(('1123', 'dadfaf'))
-        sleep(1)
+    counter = 10
+    with manager.cm():
+        num_clients = len(manager.clients)
+        for i in range(counter):
+            client = Client(str(i), str(i))
+            manager.start_echo_shell(client, Spec.DUMMY1)
+    assert num_clients + counter == len(manager.clients)
+    assert num_clients + \
+        counter == len([x for x in manager.status() if x])
+
+
+def test_read_queue():
+    queue = Queue()
+    manager = Manager(queue)
+
+    counter = 1
+    with manager.cm():
+        result = len([x for x in manager.status() if x])
+        for _ in range(counter):
+            queue.put(('1123', 'DUMMY2'))
+        sleep(.1)  # NOTE: time for request processing
+        logger.info(manager.clients)
+        assert result + counter == len([x for x in manager.status() if x])

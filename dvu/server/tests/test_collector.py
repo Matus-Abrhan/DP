@@ -12,16 +12,16 @@ def test_collector() -> None:
     NUM_REQ = 10
     request_queue: Queue = Queue()
     onto_prim_types = ['some data here']
+    collector = Collector(onto_prim_types, request_queue)
 
-    with Collector(onto_prim_types,
-                   request_queue).cm():
+    with collector.cm():
         with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
             event = 'e("72.5.65.99","53")'
             data = RequestIdentifier.RAW.value + '#' + event
             msg = bytes(data, encoding='utf-8')
             for _ in range(NUM_REQ):
                 s.sendto(msg, ('127.0.0.1', 9001))
-        sleep(1)
+            sleep(.1)  # NOTE: time for request processing
 
         counter = 0
         while not request_queue.empty():

@@ -16,8 +16,19 @@ class SysmonEvent():
 
 
 class Spec(Enum):
+    ROOT = Path('./iASTD/admin/server/spec/ROOT/root.spec')
+    DUMMY1 = Path('./iASTD/admin/server/spec/DUMMY1/dummy1.spec')
+    DUMMY2 = Path('./iASTD/admin/server/spec/DUMMY2/dummy2.spec')
     TEST = Path('./iASTD/admin/server/spec/TEST/test.spec')
     PORTSCAN = Path('./iASTD/admin/server/spec/PORTSCAN/portscan.spec')
+
+    @classmethod
+    def value_of(cls, value):
+        for k, v in cls.__members__.items():
+            if k == value:
+                return v
+        else:
+            return None
 
 
 class iASTD():

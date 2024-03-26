@@ -20,11 +20,6 @@ class RequestIdentifier(Enum):
 
 
 class RequestHandler(socketserver.BaseRequestHandler):
-    # def __init__(self, onto_prim_types, queue, *args, **kwargs):
-    #    self.onto_prim_types = onto_prim_types
-    #    self.queue = queue
-    #    super().__init__(*args, **kwargs)
-
     def handle(self) -> None:
         logger.debug(f'Handling request {self.request}')
         enc_request: bytes = self.request[0]
@@ -64,11 +59,11 @@ class Collector:
         self.started: bool = True
         self.server_process: Optional[Process] = None
 
-    def _start_collection(self,
-                          host: str = '0.0.0.0',
-                          port: int = 9001) -> None:
-        print(f'Starting cap server {host}, {port}')
-        logger.info(f'Starting cap server {host}, {port}')
+    def start_collection(self,
+                         host: str = '0.0.0.0',
+                         port: int = 9001) -> None:
+        print(f'Starting Collector server {host}, {port}')
+        logger.info(f'Starting Collector server {host}, {port}')
 
         Server = partial(
             CustomServer, self.onto_prim_types, self.request_queue)
@@ -79,12 +74,13 @@ class Collector:
                 self.started = True
 
     @contextmanager
-    def cm(self):
-        self._start_collection()
-        sleep(.1)
+    def cm(self, delay: float = .1):
+        self.start_collection()
+        sleep(delay)
         yield self
 
-        self._quit()
+        sleep(delay)
+        self.quit()
 
     def is_running(self) -> bool:
         alive = False
@@ -92,7 +88,8 @@ class Collector:
             alive = self.server_process.is_alive()
         return self.started and alive
 
-    def _quit(self) -> None:
+    def quit(self) -> None:
+        logger.info('Quitting Collector')
         if isinstance(self.server_process, Process):
             self.server_process.kill()
         self.started = False

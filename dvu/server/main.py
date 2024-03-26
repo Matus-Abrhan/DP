@@ -5,6 +5,7 @@ import yaml
 import logging
 from multiprocessing import Process, Queue
 from time import sleep
+from contextlib import contextmanager
 
 from server.manager import Manager
 from server.collector import Collector
@@ -15,11 +16,6 @@ logger = logging.getLogger(__name__)
 
 class Main:
     # ontology_types = {}
-
-    # def __del__(self):
-    #    logger.info('Deleting collect and manager process')
-    #    self.collect_process.kill()
-    #    self.manager_process.kill()
 
     def __init__(self, onto_spec_types: List[str] = ['WinEventLog']) -> None:
         # INFO: reading configuration files
@@ -41,35 +37,23 @@ class Main:
 
         # INFO: starting server
         self.request_queue: Queue = Queue()
+        self.collector = Collector(self.onto_prim_types, self.request_queue)
+        self.manager = Manager(self.request_queue)
 
-        self.collector_process = Process(
-            target=Collector.start_collection,
-            args=(self.onto_prim_types, self.request_queue)
-        )
-        self.collector_process.start()
+    @ contextmanager
+    def cm(self):
+        with self.collector.cm():
+            with self.manager.cm():
+                yield self
 
-        self.manager = Manager()
-        self.manager_process = Process(
-            target=self.manager.read_queue,
-            args=(self.manager.clients, self.request_queue)
-        )
-        self.manager_process.start()
-
-        # self.manager.read_queue()
-        # sleep(.5)
-
-
-def start_main():
-    Main()
+        self.request_queue.close()
 
 
 if __name__ == "__main__":
     app = Main()
-    # res = app.manager.request_queue.get()
-    # print(res)
-    # try:
-    #    while True:
-    #        pass
-    # except KeyboardInterrupt:
-    #    del app
-    #    exit()
+    with app.cm() as app:
+        try:
+            while True:
+                pass
+        except KeyboardInterrupt:
+            pass
