@@ -21,6 +21,7 @@ class Spec(Enum):
     DUMMY2 = Path('./iASTD/admin/server/spec/DUMMY2/dummy2.spec')
     TEST = Path('./iASTD/admin/server/spec/TEST/test.spec')
     PORTSCAN = Path('./iASTD/admin/server/spec/PORTSCAN/portscan.spec')
+    RAT = Path('./iASTD/admin/server/spec/RAT/rat.spec')
 
     @classmethod
     def value_of(cls, value):

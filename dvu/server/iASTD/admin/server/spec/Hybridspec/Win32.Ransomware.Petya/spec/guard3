@@ -1,0 +1,1 @@
+(ip = ip) && (eventid_text = "File Creation") && (Functions.contains data_commandline "dllhost.dat") 

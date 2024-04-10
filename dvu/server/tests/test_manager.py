@@ -44,7 +44,7 @@ def test_read_queue():
     with manager.cm():
         result = len([x for x in manager.status() if x])
         for _ in range(counter):
-            queue.put(('1123', 'DUMMY2'))
-        sleep(.1)  # NOTE: time for request processing
+            queue.put(('1123', 'PORTSCAN'))
+        sleep(.5)  # NOTE: time for request processing
         logger.info(manager.clients)
         assert result + counter == len([x for x in manager.status() if x])

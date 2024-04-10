@@ -30,9 +30,9 @@ def test_send_logs() -> None:
     with app.cm() as app:
         status_start = len([x for x in app.manager.status() if x])
         with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
-            event = 'DUMMY2'
+            event = 'PORTSCAN'
             data = RequestIdentifier.RAW.value + '#' + event
             msg = bytes(data, encoding='utf-8')
             s.sendto(msg, ('127.0.0.1', 9001))
-            sleep(.1)  # NOTE: time for request processing
+            sleep(.5)  # NOTE: time for request processing
         assert status_start + 1 == len([x for x in app.manager.status() if x])

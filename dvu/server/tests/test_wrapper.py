@@ -7,13 +7,13 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-@pytest.mark.skip(reason='Broken')
+# @pytest.mark.skip(reason='Broken')
 def test_start() -> None:
     proc = iASTD(Spec.TEST)
     assert proc.is_running()
 
 
-@pytest.mark.skip(reason='Broken')
+# @pytest.mark.skip(reason='Broken')
 def test_process_event() -> None:
     proc = iASTD(Spec.TEST)
     data: Optional[List[str]] = proc.process_event('e("72.5.65.99","53")')
@@ -32,4 +32,4 @@ def test_iASTD_threat_detection() -> None:
             if res is not None:
                 data.append(res[0])
 
-    logger.info(data)
+    assert 'Alert Portscan attack' in data

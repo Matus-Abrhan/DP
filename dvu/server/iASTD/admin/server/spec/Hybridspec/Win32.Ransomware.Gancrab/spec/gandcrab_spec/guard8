@@ -1,0 +1,1 @@
+(ip=ip) && (eventid_text="Process Terminated") && (Functions.contains data_image "conhost.exe")

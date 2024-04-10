@@ -1,0 +1,2 @@
+(ip = ip) && (eventid_text="Network Connection") && (Functions.contains data_image "nslookup.exe") 
+&& (Functions.contains data_protocol "udp") && (data_destinationport = "53")

@@ -1,0 +1,4 @@
+(ip=ip) && (eventid_text="Process Creation") && (Functions.contains data_image "nslookup.exe") 
+&& (Functions.contains data_commandline "\.\\(bit\\|ru\\) ns[0-9]+\.")
+&& (Functions.contains data_commandline "servers.ru") 
+&& (Functions.contains data_parentcommandline ".exe")

@@ -34,7 +34,8 @@ class Manager:
         )
 
     def start_iASTD(self, client: Client, spec: Spec) -> None:
-        self.clients.setdefault(client.__hash__(), list()).append(iASTD(spec))
+        self.clients.setdefault(
+            client.__hash__(), list()).append(iASTD(spec))
 
     def start_echo_shell(self, client: Client, spec: Spec) -> None:
         self.clients.setdefault(
@@ -96,7 +97,7 @@ class Manager:
                 if root_result:
                     spec = Spec.value_of(root_result[0])
                     if isinstance(spec, Spec):
-                        self.start_echo_shell(client, spec)
+                        self.start_iASTD(client, spec)
 
                 logger.info(
                     f'results: client={client_result}, root={root_result}')

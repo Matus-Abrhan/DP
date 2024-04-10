@@ -1,0 +1,1 @@
+(ip = ip) && (eventid_text = "Process Creation") && (Functions.contains data_commandline "vssadmin.exe") 

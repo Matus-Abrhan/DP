@@ -1,0 +1,1 @@
+(ipdst = ipdst) && (portdst = portdst) && (Functions.contains msg_req "GET /") && (Functions.contains msg_hdr "Host: www.") && (Functions.contains msg_hdr "odp9ifjaposdfjhgosurijfaewrwergw") && (Functions.contains msg_hdr "Cache-Control: no-cache") && not (Functions.contains msg_hdr "User-Agent") && not (Functions.contains msg_hdr "Accept")
