@@ -22,6 +22,8 @@ class Root_spec:
     def create(self):
         self.elements.append('(n0->elem)')
         for i, spec in enumerate(Spec):
+            if spec.name == "ROOT":
+                continue
             index = i+1
             transition = get_first_transition(spec)
             if transition:
@@ -69,25 +71,31 @@ def get_first_transition(spec: Spec) -> Optional[str]:
         return None
     with open(spec_path, 'r') as f:
         for line in f:
+            line = line.strip().replace(' ', '')
             if re.search('(local,n0,n1)', line):
-                transition = line.strip().replace(' ', '')
-                return transition
+                return line
     return None
 
 
 def create_guard(spec: Spec, line: str):
-    new_guard = list()
+    or_list = list()
+    and_list = list()
     attr_pattern = re.compile(r'\?\w+:')
     attributes = [attr[1:-1] for attr in attr_pattern.findall(line)]
 
     guard_path = (SERVER_DIR / spec.value).parent / 'guard1'
     with open(guard_path, 'r') as f:
-        contents = f.read().replace(' ', '')
-        for attr in contents.split('&&'):
-            if attr.split('=')[0] in attributes:
-                new_guard.append(attr)
+        contents = ''.join(f.read().split())
+        for and_part in contents.split('&&'):
+            for or_part in and_part.split('||'):
+                if or_part.split('=')[0] in attributes:
+                    or_list.append(or_part)
+            and_list.append(' ||\n'.join(or_list))
+            or_list.clear()
+        and_list = [x for x in and_list if x]
+        new_guard = '\n&&\n'.join(and_list)
 
-    return '&&'.join(new_guard)
+    return new_guard
 
 
 def create_alert(spec: Spec):

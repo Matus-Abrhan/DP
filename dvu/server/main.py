@@ -3,8 +3,7 @@ from pathlib import Path
 import json
 import yaml
 import logging
-from multiprocessing import Process, Queue
-from time import sleep
+from multiprocessing import Queue
 from contextlib import contextmanager
 
 from server.manager import Manager
@@ -17,7 +16,8 @@ logger = logging.getLogger(__name__)
 class Main:
     # ontology_types = {}
 
-    def __init__(self, onto_spec_types: List[str] = ['WinEventLog']) -> None:
+    def __init__(self, onto_spec_types: List[str] = ['WinEventLog'],
+                 manager_test: bool = True) -> None:
         # INFO: reading configuration files
         config_file_path: Path = SERVER_DIR / Path('./iASTD/config.yaml')
         with open(config_file_path, 'r') as config_file:
@@ -38,7 +38,7 @@ class Main:
         # INFO: starting server
         self.request_queue: Queue = Queue()
         self.collector = Collector(self.onto_prim_types, self.request_queue)
-        self.manager = Manager(self.request_queue)
+        self.manager = Manager(self.request_queue, manager_test)
 
     @ contextmanager
     def cm(self):

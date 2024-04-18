@@ -13,7 +13,7 @@
           (n1->elem)
          };
          {
-          ((local,n0,n1), e(?ipdst:string,?portdst:string), {file: "guard1"},"Functions.action1()", false)
+          ((local,n0,n1), e(?ipdst:string,?portdst:string,_,_,_,_,_), {file: "guard1"},"Functions.action1()", false)
          };
          {n1};
          {};

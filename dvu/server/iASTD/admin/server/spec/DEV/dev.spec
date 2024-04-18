@@ -9,9 +9,9 @@
 	(n3->elem)
 	};
 	{
-	((local, n0, n1), e(?x:int), {file: "guard1"}, "Functions.action1()", false),
-	((local, n0, n2), e(?x:int), {file: "guard2"}, "Functions.action2()", false),
-	((local, n0, n3), e(?x:int), {file: "guard3"}, "Functions.action3()", false)
+	((local, n0, n1), e(?x:int,_,_,_,_,_,_), {file: "guard1"}, "Functions.action1()", false),
+	((local, n0, n2), e(?x:int,_,_,_,_,_,_), {file: "guard2"}, "Functions.action2()", false),
+	((local, n0, n3), e(?x:int,_,_,_,_,_,_), {file: "guard3"}, "Functions.action3()", false)
 	};
 	{n1,n2,n3};
 	{};

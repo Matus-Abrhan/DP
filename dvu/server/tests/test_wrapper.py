@@ -16,7 +16,8 @@ def test_start() -> None:
 # @pytest.mark.skip(reason='Broken')
 def test_process_event() -> None:
     proc = iASTD(Spec.TEST)
-    data: Optional[List[str]] = proc.process_event('e("72.5.65.99","53")')
+    data: Optional[List[str]] = proc.process_event(
+        'e("72.5.65.99","53","","","","","")')
     assert data == ['Alert - Bench Test']
 
 

@@ -6,8 +6,8 @@
         (n2->elem)
       };
       {
-	      ((local,n0,n1),e(_,_,ipdst,portdst,?tcpflags1 : string,_), {file : "guard1"},"",false),
-        ((local,n1,n2),e(ipdst,portdst,_,_,?tcpflags2 : string,_), {file : "guard2"},"Functions.action1(count, thres)",false)
+	      ((local,n0,n1),e(_,_,ipdst,portdst,?tcpflags1 : string,_,_), {file : "guard1"},"",false),
+        ((local,n1,n2),e(ipdst,portdst,_,_,?tcpflags2 : string,_,_), {file : "guard2"},"Functions.action1(count, thres)",false)
       };
       {n0,n1,n2};
       {};

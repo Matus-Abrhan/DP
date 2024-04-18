@@ -31,9 +31,9 @@ def test_add_clients():
         for i in range(counter):
             client = Client(str(i), str(i))
             manager.start_echo_shell(client, Spec.DUMMY1)
-    assert num_clients + counter == len(manager.clients)
-    assert num_clients + \
-        counter == len([x for x in manager.status() if x])
+        assert num_clients + counter == len(manager.clients)
+        assert num_clients + \
+            counter == len([x for x in manager.status() if x])
 
 
 def test_read_queue():
