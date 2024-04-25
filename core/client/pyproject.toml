@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "client"
+version = "0.1.0"
+description = ""
+authors = ["Matus-Abrhan <xabrhan@stuba.sk>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+winevt = "^0.0.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+client = "client.run:run"

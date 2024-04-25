@@ -2,10 +2,8 @@ from pexpect import spawn
 from pathlib import Path
 from typing import List, Optional
 import logging
-from time import sleep
 
-from general.utils import SERVER_DIR
-from server.wrapper_iASTD import Spec
+from server.general.utils import SERVER_DIR, Spec
 
 logger = logging.getLogger(__name__)
 

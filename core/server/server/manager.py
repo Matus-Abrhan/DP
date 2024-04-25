@@ -6,8 +6,8 @@ from contextlib import contextmanager
 from time import sleep
 from threading import Thread
 
-from server.wrapper_iASTD import iASTD, Spec
-from server.wrapper_echoShell import echoShell
+from server.wrapper.wrapper_iASTD import iASTD, Spec
+from server.wrapper.wrapper_echoShell import echoShell
 from server.spec_analysis import Root_spec
 
 logger = logging.getLogger(__name__)

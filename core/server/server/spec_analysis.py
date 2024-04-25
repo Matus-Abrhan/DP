@@ -5,7 +5,7 @@ import shutil
 import os
 
 from server.manager import Spec
-from general.utils import SERVER_DIR
+from server.general.utils import SERVER_DIR
 
 logger = logging.getLogger(__name__)
 
@@ -15,8 +15,9 @@ class Root_spec:
         self.transitions = list()
         self.elements = list()
         self.final = list()
-        self.directory = Spec.ROOT.value.parent
-        shutil.rmtree(self.directory)
+        self.directory = SERVER_DIR / Spec.ROOT.value.parent
+        if self.directory.exists():
+            shutil.rmtree(self.directory)
         os.mkdir(self.directory)
 
     def create(self):

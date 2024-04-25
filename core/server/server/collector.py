@@ -1,5 +1,5 @@
 import logging
-from typing import List, Optional, Generator
+from typing import List, Optional
 import socketserver
 import json
 from enum import Enum
@@ -8,15 +8,9 @@ from multiprocessing import Process, Queue
 from contextlib import contextmanager
 from time import sleep
 
-from general.utils import AESCypher
+from server.general.utils import AESCypher,
 
 logger = logging.getLogger(__name__)
-
-
-class RequestIdentifier(Enum):
-    RAW = 'raw'
-    WIN_EVENT = 'winevt'
-    EXIT = 'exit'
 
 
 class RequestHandler(socketserver.BaseRequestHandler):
@@ -27,12 +21,14 @@ class RequestHandler(socketserver.BaseRequestHandler):
         request = crypto.decrypt(enc_request)
         client_addr = self.client_address[0]
         (iden, data) = request.split('#')
+        print(data)
         identifier: RequestIdentifier = RequestIdentifier(iden)
         # Sysmon events
         if identifier is RequestIdentifier.WIN_EVENT:
             event = Collector.parse_win_event(
-                self.server.onto_prim_types,
-                data)
+                data,
+                self.server.onto_prim_types
+            )
             logger.debug(f'writeing to queue: {event}')
             self.server.queue.put((client_addr, event))
 
@@ -95,7 +91,7 @@ class Collector:
         self.started = False
 
     @staticmethod
-    def parse_win_event(data, onto_prim_types) -> str:
+    def parse_win_event(data: str, onto_prim_types) -> str:
         try:
             flg = True
             curr_event = ''
@@ -111,17 +107,12 @@ class Collector:
                     if attribute in evt_attribute_:
                         fl = True
                         if flg:
-                            curr_event = 'e("' +\
-                                str(value.encode(
-                                    'utf-8',
-                                    'ignore'
-                                )).replace('"', '') + '","'
+                            curr_event = 'e("' + value.replace('"', '') + '","'
                             flg = False
                             c = c+1
                         else:
-                            curr_event = curr_event + \
-                                str(value.encode('utf-8', 'ignore')
-                                    ).replace('"', '') + '","'
+                            curr_event = curr_event +\
+                                value.replace('"', '') + '","'
                             c = c+1
                 if not fl:
                     if flg:
