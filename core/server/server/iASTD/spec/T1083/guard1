@@ -1,0 +1,3 @@
+Functions.contains EventData.Data.RuleName "T1083" ||
+(Functions.count_occurances EventData.Data.CommandLine ["Desktop"; "Downloads"; "Documents"; "AppData/Local"; "AppData/Roaming"; "Program Files"; "User"] > 2) ||
+System.EventID = 1 && Functions.contains EventData.Data.Image DirLister.exe

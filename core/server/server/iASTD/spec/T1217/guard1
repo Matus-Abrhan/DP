@@ -1,0 +1,2 @@
+Functions.contains EventData.Data.RuleName "T1217" ||
+System.EventID = 1 && (Functions.count_occurances EventData.Data.CommandLine ["C:\Users\"; "Bookmarks"; "R"] > 2) && (Functions.count_occurances EventData.Data.Image ["where"; "powershell"] > 0)

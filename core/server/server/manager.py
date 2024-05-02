@@ -6,9 +6,9 @@ from contextlib import contextmanager
 from time import sleep
 from threading import Thread
 
-from server.wrapper.wrapper_iASTD import iASTD, Spec
+from server.wrapper.wrapper_iASTD import iASTD
 from server.wrapper.wrapper_echoShell import echoShell
-from server.spec_analysis import Root_spec
+from server.general.utils import Spec
 
 logger = logging.getLogger(__name__)
 
@@ -25,8 +25,6 @@ class Manager:
     def __init__(self, request_queue: Queue, test: bool = True) -> None:
         self.queue = request_queue
         self.read_thread: Optional[Thread] = None
-        root_spec = Root_spec()
-        root_spec.create()
 
         self.clients: Dict[int, List[Union[iASTD, echoShell]]] = dict()
 
@@ -65,13 +63,23 @@ class Manager:
                     client: Client,
                     event: str) -> List[Optional[List[str]]]:
         astd_list = self.clients.get(
-            client.__hash__(), None)
+            client.__hash__(), list())
 
         result = list()
+        remove_list = list()
         if astd_list:
-            for astd in astd_list:
+            for idx, astd in enumerate(astd_list):
                 if isinstance(astd, (iASTD, echoShell)):
-                    result.append(astd.process_event(event))
+                    instance_result = astd.process_event(event)
+                    if instance_result and 'exit' in instance_result:
+                        remove_list.append(idx)
+                    result.append(instance_result)
+        if len(remove_list) > 0:
+            remove_list.reverse()
+            for idx in remove_list:
+                del astd_list[idx]
+            self.clients[client.__hash__()] = astd_list
+
         return result
 
     def status(self) -> List[bool]:
@@ -94,11 +102,11 @@ class Manager:
         if self.read_thread:
             return
 
-        def loop(thread_alive) -> None:
-            while thread_alive():
+        def loop() -> None:
+            while True:
                 (ip_addr, event) = self.queue.get()
                 if not ip_addr and not event:
-                    continue
+                    break
                 logger.info(f'read from queue: {(ip_addr, event)}')
 
                 client = Client(ip_addr, 'MAC')
@@ -112,10 +120,8 @@ class Manager:
                 logger.info(
                     f'results: client={client_result}, root={root_result}')
 
-        self.thread_alive = True
         self.read_thread = Thread(
             target=loop,
-            args=(lambda: self.thread_alive,)
         )
         self.read_thread.start()
         logger.info('Manager started')
@@ -126,6 +132,5 @@ class Manager:
             for instance in client:
                 instance.stop()
         if isinstance(self.read_thread, Thread):
-            self.thread_alive = False
             self.queue.put(('', ''))
             self.read_thread.join()

@@ -1,0 +1,4 @@
+Functions.contains EventData.Data.RuleName "T1202" ||
+Functions.contains EventData.Data.ParentImage "pcalua.exe" && System.EventID = 1 ||
+System.EventID = 1 && (Functions.count_occurances EventData.Data.CommandLine ["conhost"; "exe"] == 2) ||
+System.EventID = 1 && (Functions.count_occurances EventData.Data.CommandLine ["forfiles"; "exe"] == 2) 

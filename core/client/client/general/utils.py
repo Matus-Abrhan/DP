@@ -6,10 +6,13 @@ ROOT_DIR: Path = Path(__file__).absolute().parent.parent
 
 
 class Encoding:
-    def decode(self, msg: bytes) -> str:
+
+    @staticmethod
+    def decode(msg: bytes) -> str:
         return str(msg, encoding='utf-8')
 
-    def encode(self, msg: str) -> bytes:
+    @staticmethod
+    def encode(msg: str) -> bytes:
         return bytes(msg, encoding='utf-8')
 
 

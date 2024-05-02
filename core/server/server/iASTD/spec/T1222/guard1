@@ -1,0 +1,4 @@
+Functions.contains EventData.Data.RuleName "T1222" ||
+Functions.contains EventData.Data.Image "takeown /f" && System.EventID = 1 ||
+System.EventID = 1 && Functions.contains EventData.Data.Image "icacls" && (Functions.count_occurances EventData.Data.CommandLine ["/grant"; ":r"] > 0) ||
+System.EventID = 1 && Functions.contains EventData.Data.Image "attrib"  && (Functions.count_occurances EventData.Data.CommandLine ["-r"; "+h", "-h", "+s", "-s"] > 0) ||

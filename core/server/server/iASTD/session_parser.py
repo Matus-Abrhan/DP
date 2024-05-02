@@ -17,7 +17,7 @@ def HTTPParser(http_payload, opts=0):
         http_c = ""
         msg_cnt=http_payload
         if opts == 0:
-           regex = r"(?:[\r\n]{0,1})(\w+\-\w+|\w+)(?:\ *:\ *)([^\r\n]*)(?:[\r\n]{0,1})"
+           regex = ur"(?:[\r\n]{0,1})(\w+\-\w+|\w+)(?:\ *:\ *)([^\r\n]*)(?:[\r\n]{0,1})"
            headers = re.findall(regex, http_payload, re.UNICODE)
            for key, val in headers:
               http_c = http_c + str(key)+": "+str(val)+" "

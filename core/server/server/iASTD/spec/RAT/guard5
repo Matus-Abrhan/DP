@@ -1,0 +1,1 @@
+(Functions.contains payload "stdapi") && (tcpflags2 = "SA")

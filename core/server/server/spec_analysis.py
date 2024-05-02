@@ -4,18 +4,17 @@ import re
 import shutil
 import os
 
-from server.manager import Spec
-from server.general.utils import SERVER_DIR
+from server.general.utils import ROOT_DIR, Spec
 
 logger = logging.getLogger(__name__)
 
 
-class Root_spec:
+class RootSpec:
     def __init__(self):
         self.transitions = list()
         self.elements = list()
         self.final = list()
-        self.directory = SERVER_DIR / Spec.ROOT.value.parent
+        self.directory = ROOT_DIR / Spec.ROOT.value.parent
         if self.directory.exists():
             shutil.rmtree(self.directory)
         os.mkdir(self.directory)
@@ -67,7 +66,7 @@ class Root_spec:
 
 
 def get_first_transition(spec: Spec) -> Optional[str]:
-    spec_path = SERVER_DIR / spec.value
+    spec_path = ROOT_DIR / spec.value
     if not spec_path.exists():
         return None
     with open(spec_path, 'r') as f:
@@ -84,7 +83,7 @@ def create_guard(spec: Spec, line: str):
     attr_pattern = re.compile(r'\?\w+:')
     attributes = [attr[1:-1] for attr in attr_pattern.findall(line)]
 
-    guard_path = (SERVER_DIR / spec.value).parent / 'guard1'
+    guard_path = (ROOT_DIR / spec.value).parent / 'guard1'
     with open(guard_path, 'r') as f:
         contents = ''.join(f.read().split())
         for and_part in contents.split('&&'):
@@ -124,13 +123,5 @@ def create_transition(spec, line, index):
 
 
 if __name__ == "__main__":
-    # for i, s in enumerate(Spec):
-    #    index = i+1
-    #    res = get_first_transition(s)
-    #    if res:
-    #        print(create_guard(s, res))
-    #        print(create_alert(s))
-    #        print(create_transition(s, res, index))
-    #    print('===============================')
     root_spec = Root_spec()
     root_spec.create()
