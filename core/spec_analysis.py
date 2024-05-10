@@ -19,25 +19,28 @@ class RootSpec:
         if self.directory.exists():
             shutil.rmtree(self.directory)
         os.mkdir(self.directory)
-        # link_src = ROOT_DIR / './iASTD/spec/global_functions.ml'
-        # link_dst = self.directory / 'global_functions.ml'
-        # os.symlink(link_src, link_dst)
+        link_src = ROOT_DIR / './iASTD/spec/global_functions.ml'
+        link_dst = self.directory / 'global_functions.ml'
+        os.symlink(link_src, link_dst)
 
     def create(self):
-        for spec in Spec:
+        for i, spec in enumerate(Spec):
             if spec.name == "ROOT":
                 continue
+            index = i+1
             transition = get_first_transition(spec)
             if transition:
-                with open(self.directory / ('guard_' + spec.name), 'w+') as g:
+                with open(self.directory / ('guard_' + spec.name), 'w+') as guard:
                     data = create_guard(spec, transition)
-                    g.write(data)
-                with open(self.directory / 'functions.ml', 'a+') as f:
+                    guard.write(data)
+                with open(self.directory / 'functions.ml', 'a+') as functions:
                     data = create_alert(spec)
-                    f.write(data)
+                    functions.write(data)
                 data = create_transition(spec, transition)
                 self.automatons.append(create_automaton(data))
 
+        # automatons = ';\n\t\t'.join(self.automatons)
+        logger.info(len(self.automatons))
         synchron = create_synchron(self.automatons)
 
         def get_spec(synchron):
@@ -46,6 +49,7 @@ class RootSpec:
                 '<*;\n'
                 'imports: {"global_functions.ml", "functions.ml"};\n'
                 'attributes: {};\n'
+                # TODO: add list of automatons
                 f'{synchron}\n'
                 '>\n'
                 ')'
@@ -54,28 +58,29 @@ class RootSpec:
             spec.write(get_spec(synchron))
 
 
-def join_synchron(a: str, b: str) -> str:
-    if len(a) == 0 and len(b) > 0:
+def join_synchron(a: str, b: Optional[str]) -> str:
+    if a is None:
         return b
-    elif len(b) == 0 and len(a) > 0:
+    elif b is None:
         return a
-    elif len(a) > 0 and len(b) > 0:
-        synchron = [
-            '<||;',
-            ';\n'.join([a, b]),
-            '>'
-        ]
-        return '\n'.join(synchron)
-    raise ValueError(f'At least one of {a} or {b} should not be empty')
+
+    synchron = [
+        '<||;',
+        ';\n'.join([a, b]),
+        '>'
+    ]
+    # logger.info('\n'.join(synchron))
+    return '\n'.join(synchron)
 
 
 def create_synchron(elements: List[str]) -> str:
+    logger.info(elements)
     if len(elements) == 1:
         return elements[0]
     else:
         new_elements = list()
         if (len(elements) % 2) != 0:
-            elements.append('')
+            elements.append(None)
         half = int(len(elements)/2)
         for a, b in zip(elements[:half], elements[half:]):
             new_elements.append(join_synchron(a, b))

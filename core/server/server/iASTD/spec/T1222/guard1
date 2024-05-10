@@ -1,4 +1,3 @@
-Functions.contains EventData.Data.RuleName "T1222" ||
-Functions.contains EventData.Data.Image "takeown /f" && System.EventID = 1 ||
-System.EventID = 1 && Functions.contains EventData.Data.Image "icacls" && (Functions.count_occurances EventData.Data.CommandLine ["/grant"; ":r"] > 0) ||
-System.EventID = 1 && Functions.contains EventData.Data.Image "attrib"  && (Functions.count_occurances EventData.Data.CommandLine ["-r"; "+h", "-h", "+s", "-s"] > 0) ||
+Global_functions.contains eventDataDataImage "takeown /f" && systemEventID = "1" ||
+systemEventID = "1" && Global_functions.contains eventDataDataImage "icacls" && (Global_functions.count_occurances eventDataDataCommandLine ["/grant"; ":r"] > 0) ||
+systemEventID = "1" && Global_functions.contains eventDataDataImage "attrib" && (Global_functions.count_occurances eventDataDataCommandLine ["-r"; "+h"; "-h"; "+s"; "-s"] > 0)

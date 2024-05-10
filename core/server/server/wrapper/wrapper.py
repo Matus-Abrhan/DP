@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from pexpect import spawn
-from typing import Optional, List
+from typing import List
 from pathlib import Path
 import logging
 
@@ -25,7 +25,7 @@ class Wrapper(ABC):
         if not self.spec_path.is_file():
             raise OSError(f'Path {self.spec_path} is not file')
 
-        self.app_instance: Optional[spawn] = None
+        self.app_instance = None
 
     @abstractmethod
     def start(self, command: str, **kwargs) -> None:
@@ -47,11 +47,11 @@ class Wrapper(ABC):
         return self._EXPECT_STRING
 
     def is_running(self) -> bool:
-        if self.app_instance:
+        if self.app_instance is not None:
             return self.app_instance.isalive()
         return False
 
-    def process_event(self, event: str) -> Optional[List[str]]:
+    def process_event(self, event: str) -> List[str]:
         event = event.strip()
         if self.app_instance:
             self.app_instance.sendline(event)
@@ -59,12 +59,14 @@ class Wrapper(ABC):
             result = data.strip().split('\r\n')
             if len(result) > 1:
                 return result[1:]
-            return None
-        return None
+            return list()
+        raise ValueError(f'Process {self.bin_path.name} is not running')
 
     def stop(self) -> None:
         if self.app_instance:
             self.app_instance.close()
+            logger.info(f'Stopped: {self}')
+            print(f'Stopped: {self}')
 
     def _read_stdout(self) -> bytes:
         if self.app_instance:

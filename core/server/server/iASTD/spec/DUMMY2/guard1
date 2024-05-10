@@ -1,6 +1,6 @@
-ipdst = "192.168.100.1" ||
-ipdst = "192.168.100.2" ||
-ipdst = "192.168.100.3" &&
-portdst = "80" ||
-portdst = "443"
+eventDataDataSourceIp = "192.168.100.1" ||
+eventDataDataSourceIp = "192.168.100.2" ||
+eventDataDataSourceIp = "192.168.100.3" &&
+eventDataDataDestinationPort = "80" ||
+eventDataDataDestinationPort = "443"
 

@@ -1,12 +1,14 @@
 from pathlib import Path
 from enum import Enum
-from typing import Set, Dict
+from typing import Dict, Tuple, List, Optional
 import json
 import shutil
 import os
+from multiprocessing import Queue
 
 
 ROOT_DIR: Path = Path(__file__).absolute().parent.parent
+CLIENT_ID_BYTES = 4
 
 
 class Encoding:
@@ -23,11 +25,12 @@ class EventName(Enum):
 
 class Spec(Enum):
     ROOT = Path('./iASTD/spec/ROOT/root.spec')
-    DUMMY1 = Path('./iASTD/spec/DUMMY1/dummy1.spec')
-    DUMMY2 = Path('./iASTD/spec/DUMMY2/dummy2.spec')
-    TEST = Path('./iASTD/spec/TEST/test.spec')
-    PORTSCAN = Path('./iASTD/spec/PORTSCAN/portscan.spec')
-    RAT = Path('./iASTD/spec/RAT/rat.spec')
+    T1083 = Path('./iASTD/spec/T1083/t1083.spec')
+    T1202 = Path('./iASTD/spec/T1202/t1202.spec')
+    # T1217 = Path('./iASTD/spec/T1217/t1217.spec')
+    T1222 = Path('./iASTD/spec/T1222/t1222.spec')
+    # DUMMY1 = Path('./iASTD/spec/DUMMY1/dummy1.spec')
+    # DUMMY2 = Path('./iASTD/spec/DUMMY2/dummy2.spec')
 
     @classmethod
     def value_of(cls, value):
@@ -52,7 +55,6 @@ class RequestIdentifier(Enum):
 def get_event_def(event_name: EventName) -> Dict:
     file: Path = ROOT_DIR / Path('./iASTD/event_defs.json')
     with open(file, 'r') as event_defs:
-        print(event_defs)
         defs_dict: Dict = json.load(event_defs)
         res = defs_dict.get(event_name.value, None)
         if res:
@@ -65,21 +67,19 @@ def get_event_def(event_name: EventName) -> Dict:
 class WinEvent:
     def __init__(self) -> None:
         evet_def_data = get_event_def(EventName.WIN_EVENT_LOG)
-        self.event_def: Set = set(evet_def_data.keys())
+        self.event_def = evet_def_data.keys()
 
-    def get_event(self, data: Dict) -> str:
-        keys = self.event_def.union(data.keys())
-        full_event = dict()
-        for key in keys:
-            full_event[key] = data.get(data[key], None)
+    def get_event(self, data: List[str]) -> Optional[str]:
+        if len(data) != len(self.event_def):
+            return None
 
         def get_str(x):
             if not x:
-                return ''
+                return '""'
             else:
-                return x
+                return '"' + x + '"'
 
-        res = ','.join([get_str(x) for x in full_event.values()])
+        res = ','.join([get_str(x) for x in data])
 
         return 'e(' + res + ')'
 
@@ -104,9 +104,47 @@ def translate_spec_type(event_name: str, event_def: Dict) -> None:
         )
 
 
+def create_global_func_links() -> None:
+    for spec in Spec:
+        spec_path: Path = ROOT_DIR / spec.value
+        link_src: Path = spec_path.parent.parent / 'global_functions.ml'
+        link_dst: Path = spec_path.parent / 'global_functions.ml'
+        try:
+            os.symlink(link_src, link_dst)
+        except FileExistsError:
+            continue
+
+
 def cleanup_spec_type() -> None:
     for spec in Spec:
         dst: Path = ROOT_DIR / spec.value
         src: Path = dst.parent / ('backup_' + dst.name)
-        os.remove(dst)
-        shutil.move(src, dst)
+        if src.exists() and dst.exists():
+            os.remove(dst)
+            shutil.move(src, dst)
+
+
+class ProcessCommand(Enum):
+    STOP = 0
+    STATUS = 1
+    REGISTER = 2
+    UNREGISTER = 3
+
+
+class RWQueue:
+    def __init__(self, q1, q2) -> None:
+        self._r_q: Queue = q1
+        self._w_q: Queue = q2
+
+    def put(self, item: Tuple[ProcessCommand, str]) -> None:
+        self._w_q.put(item)
+
+    def get(self) -> Tuple[ProcessCommand, str]:
+        return self._r_q.get()
+
+    def empty(self) -> bool:
+        return self._r_q.empty()
+
+
+def next_power_of_2(x):
+    return 2**(x - 1).bit_length()

@@ -1,4 +1,4 @@
-ipdst = "8.8.8.8" ||
-ipdst = "1.1.1.1" &&
-portdst = "666" ||
-portdst = "42"
+eventDataDataSourceIp = "8.8.8.8" ||
+eventDataDataSourceIp = "1.1.1.1" &&
+eventDataDataDestinationPort = "666" ||
+eventDataDataDestinationPort = "42"
