@@ -1,4 +1,0 @@
-ipdst = "8.8.8.8" ||
-ipdst = "1.1.1.1" &&
-portdst = "666" ||
-portdst = "42"

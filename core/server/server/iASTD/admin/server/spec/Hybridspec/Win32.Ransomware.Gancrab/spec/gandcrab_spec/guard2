@@ -1,4 +1,0 @@
-(ipdst=ipdst) && (portdst=portdst) && (portdst="80") && (Functions.contains msg_req "GET")
-&& (Functions.contains msg_hdr "Host: ") && (Functions.contains msg_hdr "\.\\(bit\\|ru\\)")
-&& (Functions.contains msg_hdr "User-Agent: Mozilla") && (Functions.contains msg_hdr "Cache-Control: no-cache")
-&& not (Functions.contains msg_hdr "Accept") && not (Functions.contains msg_hdr "Connection") && not (Functions.contains msg_hdr "Referer") 

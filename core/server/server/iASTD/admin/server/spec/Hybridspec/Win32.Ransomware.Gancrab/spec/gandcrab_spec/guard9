@@ -1,2 +1,0 @@
-(ip = ip) && (eventid_text = "Network Connection") && (Functions.contains data_image "svchost.exe")
-&& (Functions.contains data_protocol "tcp") && (data_sourceport == "3389")

@@ -19,7 +19,7 @@ def test_collector() -> None:
     with collector.cm(event_queue, RWQueue(q2, q1), RWQueue(q4, q3)):
         with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
             event = 'e("72.5.65.99","53")'
-            data = RequestIdentifier.RAW.value + '#' + event
+            data = RequestIdentifier.RAW.add_data(['123', event])
             msg = bytes(data, encoding='utf-8')
             for _ in range(NUM_REQ):
                 s.sendto(msg, ('127.0.0.1', 9001))

@@ -14,6 +14,15 @@ from server.general.utils import Spec, ProcessCommand, RWQueue, CLIENT_ID_BYTES
 logger = logging.getLogger(__name__)
 
 
+client_logger = logging.getLogger('Client Logger')
+client_logger.setLevel(logging.INFO)
+formatter = logging.Formatter(fmt='%(levelname)s %(asctime)s %(message)s')
+file_handle = logging.FileHandler(f'clients_{random.getrandbits(16)}.log')
+file_handle.setLevel(logging.INFO)
+file_handle.setFormatter(formatter)
+client_logger.addHandler(file_handle)
+
+
 class ManagerProcess(Process):
     ROOT_CLIENT = '0'
 
@@ -49,22 +58,28 @@ class ManagerProcess(Process):
                 self.collector_rw.put((command, data))
 
             elif command == ProcessCommand.REGISTER:
+                ip_addr = data
                 r = random.getrandbits(CLIENT_ID_BYTES*8)
                 _ = self.clients.setdefault(str(r), list())
                 data = '#'.join([str(r), data])
                 self.collector_rw.put((command, data))
+                client_logger.info(f'Client from {ip_addr} registered as {r}')
 
             elif command == ProcessCommand.UNREGISTER:
                 astd_list = self.clients.pop(data, list())
+                if len(astd_list) > 0:
+                    client_logger.info(f'Client {data} unregistered')
                 for astd in astd_list:
+                    client_logger.info(f'{data} stopped {astd.spec}')
                     astd.stop()
 
     def run(self):
         signal.signal(signal.SIGINT, signal.SIG_IGN)
+        self.processed_counter = 0
 
         def read_loop() -> None:
             self.start_iASTD(self.ROOT_CLIENT, Spec.ROOT)
-            self.processed_counter = 0
+
             while True:
                 (client, event) = self.event_q.get()
                 self.processed_counter += 1
@@ -73,15 +88,15 @@ class ManagerProcess(Process):
 
                 root_result = self.feed_root(event)
                 # logger.info(root_result)
-                print(f'Root: {root_result}')
+                # print(f'Root: {root_result}')
                 if len(root_result) > 0:
                     for result in set(root_result):
                         spec = Spec.value_of(result)
                         if isinstance(spec, Spec):
                             self.start_iASTD(client, spec)
 
-                client_result = self.feed_client(client, event)
-                print(f'{client}: {client_result}')
+                self.feed_client(client, event)
+                # print(f'{client}: {client_result}')
 
         self.read_thread = Thread(target=read_loop)
         self.read_thread.start()
@@ -92,13 +107,12 @@ class ManagerProcess(Process):
         client_astds = self.clients.get(client, None)
         if client_astds is not None:
             client_astds.append(iASTD(spec))
-            # self.clients[client] = client_astds
+            client_logger.info(f'{client} started {spec}')
 
     def start_echo_shell(self, client: str, spec: Spec) -> None:
         client_astds = self.clients.get(client, None)
         if client_astds is not None:
             client_astds.append(echoShell(spec))
-            # self.clients[client] = client_astds
 
     def feed_root(self, event: str) -> List[str]:
         return self.clients[self.ROOT_CLIENT][0].process_event(event)
@@ -112,18 +126,20 @@ class ManagerProcess(Process):
             for idx, astd in enumerate(astd_list):
                 if isinstance(astd, (iASTD, echoShell)):
                     instance_result = astd.process_event(event)
-                    if len(instance_result) > 0 and 'exit' in instance_result:
+                    if any('exit' in x.split() for x in instance_result):
                         remove_list.append(idx)
                     result.extend(instance_result)
+            if any([x for x in result]):
+                client_logger.info(f'{client}: {result}')
             if len(remove_list) > 0:
                 remove_list.reverse()
                 for idx in remove_list:
-                    # del astd_list[idx]
                     astd = astd_list.pop(idx)
                     astd.stop()
+                    client_logger.info(f'{client} stopped {astd.spec}')
 
                 # TODO: check if this assignment is needed
-                self.clients[client] = astd_list
+                # self.clients[client] = astd_list
         return result
 
 
@@ -143,6 +159,7 @@ class Manager:
     def start_manager(self, event_q, collector_rw) -> None:
         self.manager_process = ManagerProcess(event_q, collector_rw)
         self.manager_process.start()
+        logger.info("Starting Manager")
         print('Starting Manager')
 
     def quit(self) -> None:

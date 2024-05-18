@@ -1,2 +1,0 @@
-print_endline "Guard is book_id even";
-(book_id mod 2) = 0

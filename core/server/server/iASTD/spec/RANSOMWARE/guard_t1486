@@ -1,0 +1,2 @@
+systemEventID = "1" && (Global_functions.count_occurances eventDataDataCommandLine ["gpg"; "-c"] == 2) ||
+systemEventID = "1" && Global_functions.contains eventDataDataCommandLine "dcrypt"

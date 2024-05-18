@@ -1,116 +1,15 @@
 (MAIN,
-<*;
-        imports: {"functions.ml"};
-        attributes: {};
-        <||;
-		<||;
-			<||;
-				<aut;
-				        {
-				        (n0->elem),
-				        (n1->elem)
-				        };
-				        {
-				        ((local, n0, n1), e(?x:string,?y:string), {file: "guard1"}, "Functions.alert1()", false),
-				        };
-				        {n1};
-				        {};
-				        n0
-				>;
-				<aut;
-				        {
-				        (n0->elem),
-				        (n1->elem)
-				        };
-				        {
-				        ((local, n0, n1), e(?x:string,?y:string), {file: "guard2"}, "Functions.alert2()", false),
-				        };
-				        {n1};
-				        {};
-				        n0
-				>
-			>;
-			<||;
-				<aut;
-				        {
-				        (n0->elem),
-				        (n1->elem)
-				        };
-				        {
-				        ((local, n0, n1), e(?x:string,?y:string), {file: "guard1"}, "Functions.alert1()", false),
-				        };
-				        {n1};
-				        {};
-				        n0
-				>;
-				<aut;
-				        {
-				        (n0->elem),
-				        (n1->elem)
-				        };
-				        {
-				        ((local, n0, n1), e(?x:string,?y:string), {file: "guard2"}, "Functions.alert2()", false),
-				        };
-				        {n1};
-				        {};
-				        n0
-				>
-			>
-		>;
-		<||;
-			<||;
-				<aut;
-				        {
-				        (n0->elem),
-				        (n1->elem)
-				        };
-				        {
-				        ((local, n0, n1), e(?x:string,?y:string), {file: "guard1"}, "Functions.alert1()", false),
-				        };
-				        {n1};
-				        {};
-				        n0
-				>;
-				<aut;
-				        {
-				        (n0->elem),
-				        (n1->elem)
-				        };
-				        {
-				        ((local, n0, n1), e(?x:string,?y:string), {file: "guard2"}, "Functions.alert2()", false),
-				        };
-				        {n1};
-				        {};
-				        n0
-				>
-			>;
-			<||;
-				<aut;
-				        {
-				        (n0->elem),
-				        (n1->elem)
-				        };
-				        {
-				        ((local, n0, n1), e(?x:string,?y:string), {file: "guard1"}, "Functions.alert1()", false),
-				        };
-				        {n1};
-				        {};
-				        n0
-				>;
-				<aut;
-				        {
-				        (n0->elem),
-				        (n1->elem)
-				        };
-				        {
-				        ((local, n0, n1), e(?x:string,?y:string), {file: "guard2"}, "Functions.alert2()", false),
-				        };
-				        {n1};
-				        {};
-				        n0
-				>
-			>
-		>
+	<aut;
+		imports: {"functions.ml"};
+	        {
+	        (n0->elem),
+	        (n1->elem)
+	        };
+	        {
+	        ((local, n0, n1), e(?x:string,?y:string), {file: "guard1"}, "Functions.alert1()", true),
+	        };
+	        {n1};
+	        {};
+	        n0
 	>
->
 )

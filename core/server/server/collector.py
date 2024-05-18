@@ -25,8 +25,10 @@ class RequestHandler(socketserver.BaseRequestHandler):
         client_addr = self.client_address[0]
         try:
             (iden, client_id, data) = request.split('#')
-        except ValueError:
+        except ValueError as e:
             logger.warning(f'Incorrect request format from user {client_addr}')
+            logger.warning(e)
+            return
         identifier: RequestIdentifier = RequestIdentifier(iden)
         # Sysmon events
         if identifier is RequestIdentifier.WIN_EVENT:
@@ -35,16 +37,12 @@ class RequestHandler(socketserver.BaseRequestHandler):
             if event is not None:
                 # logger.debug(f'writeing to queue: {event}')
                 self.server.event_q.put((client_id, event))
-
         elif identifier is RequestIdentifier.REGISTER:
             self.server.manager_rw.put((ProcessCommand.REGISTER, client_addr))
-
         elif identifier is RequestIdentifier.UNREGISTER:
             self.server.manager_rw.put((ProcessCommand.UNREGISTER, client_id))
-            pass
-
         elif identifier is RequestIdentifier.RAW:
-            logger.debug(f'writeing to queue: {data}')
+            logger.debug(f'writing to queue: {data}')
             self.server.event_q.put((client_addr, data))
 
 
@@ -122,6 +120,8 @@ class Collector:
                          host=None, port=None) -> None:
         self.server_process = CollectorProcess(event_q, manager_rw, app_rw)
         self.server_process.start()
+        print('Starting Collector')
+        logger.info('Starting Collector')
 
     @contextmanager
     def cm(self, event_q: Queue, manager_rw: RWQueue, app_rw: RWQueue,

@@ -1,1 +1,0 @@
-(ip = ip) && (eventid_text = "Process Creation") && (Functions.contains data_parentcommandline ".exe") && (Functions.contains data_commandline "attrib +h .")

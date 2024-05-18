@@ -4,6 +4,7 @@ from contextlib import contextmanager
 
 from server.manager import Manager
 from server.collector import Collector
+from server.collector_kafka import KafkaCollector
 from server.spec_analysis import RootSpec
 from server.general.utils import translate_spec_type, cleanup_spec_type
 from server.general.utils import EventName, get_event_def, ProcessCommand
@@ -22,7 +23,7 @@ class App:
         translate_spec_type(event_name.value, self.event_def)
         create_global_func_links()
 
-        self.collector = Collector()
+        self.collector = KafkaCollector()  # Collector()
         self.manager = Manager()
 
     def status(self):
@@ -32,7 +33,7 @@ class App:
         return data
 
     @contextmanager
-    def cm(self):
+    def cm(self, finish=True):
         event_q = Queue()
         q1, q2 = Queue(), Queue()
         q3, q4 = Queue(), Queue()
@@ -42,8 +43,10 @@ class App:
                                    RWQueue(q2, q1),
                                    RWQueue(q4, q3)):
                 yield self
-                while self.status()['events_pending'] != '0':
-                    pass
+                if finish:
+                    while events := self.status()['events_pending'] != '0':
+                        logger.info(events)
+                        pass
         # cleanup_spec_type()
 
 

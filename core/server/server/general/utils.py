@@ -25,10 +25,15 @@ class EventName(Enum):
 
 class Spec(Enum):
     ROOT = Path('./iASTD/spec/ROOT/root.spec')
+    T1053 = Path('./iASTD/spec/T1053/t1053.spec')
+    T1056 = Path('./iASTD/spec/T1056/t1056.spec')
+    T1059 = Path('./iASTD/spec/T1059/t1059.spec')
     T1083 = Path('./iASTD/spec/T1083/t1083.spec')
     T1202 = Path('./iASTD/spec/T1202/t1202.spec')
-    # T1217 = Path('./iASTD/spec/T1217/t1217.spec')
     T1222 = Path('./iASTD/spec/T1222/t1222.spec')
+    T1486 = Path('./iASTD/spec/T1486/t1486.spec')
+    RANSOMWARE = Path('./iASTD/spec/RANSOMWARE/ransomware.spec')
+    KEYLOGGER = Path('./iASTD/spec/KEYLOGGER/keylogger.spec')
     # DUMMY1 = Path('./iASTD/spec/DUMMY1/dummy1.spec')
     # DUMMY2 = Path('./iASTD/spec/DUMMY2/dummy2.spec')
 
@@ -48,8 +53,10 @@ class RequestIdentifier(Enum):
     UNREGISTER = 'unreg'
     EXIT = 'exit'
 
-    def add_data(cls, data) -> str:
-        return '#'.join([cls.value, data])
+    def add_data(cls, data: List[str]) -> str:
+        join_list = [cls.value]
+        join_list.extend(data)
+        return '#'.join(join_list)
 
 
 def get_event_def(event_name: EventName) -> Dict:

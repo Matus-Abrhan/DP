@@ -1,0 +1,2 @@
+systemEventID = "1" && Global_functions.contains eventDataDataImage "powershell.exe" && Global_functions.contains eventDataDataCommandLine "Get-Keystrokes"
+

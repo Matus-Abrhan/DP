@@ -1,5 +1,0 @@
-(ipdst=ipdst) && (portdst=portdst) && (portdst="80") && (Functions.contains msg_req "GET")
-&& (Functions.contains msg_req "\.\\(exe\\|bin\\)") && (Functions.contains msg_hdr "Connection: Keep-Alive")
-&& (Functions.contains msg_hdr "Accept:") && (Functions.contains msg_hdr "User-Agent: Mozilla")
-&& (Functions.contains msg_hdr "Host: [0-9\.]+") 
-

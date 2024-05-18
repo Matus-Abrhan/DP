@@ -120,7 +120,8 @@ def create_guard(spec: Spec, line: str):
     and_list = list()
     attributes = WIN_EVENT_OBJECT.event_def
 
-    guard_path = (ROOT_DIR / spec.value).parent / 'guard1'
+    guard_name = re.search(r'guard[_0-9a-zA-Z]*', line)
+    guard_path = (ROOT_DIR / spec.value).parent / guard_name.group(0)
     with open(guard_path, 'r') as f:
         contents = ' '.join(f.read().split())
         for and_part in contents.split('&&'):

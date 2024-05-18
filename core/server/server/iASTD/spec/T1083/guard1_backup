@@ -1,3 +1,0 @@
-Global_functions.contains eventDataDataRuleName "T1083" ||
-(Global_functions.count_occurances eventDataDataCommandLine ["Desktop"; "Downloads"; "Documents"; "AppData/Local"; "AppData/Roaming"; "Program Files"; "User"] > 2) ||
-systemEventID = "1" && Global_functions.contains eventDataDataImage "DirLister.exe"

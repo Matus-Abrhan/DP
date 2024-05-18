@@ -23,8 +23,8 @@ def test_start() -> None:
 def test_process_event() -> None:
     proc = iASTD(Spec.TEST)
     data: Optional[str] = proc.process_event(
-        'e("1")')
-    assert data == 'Alert: 1'
+        'e("1", "")')
+    assert data == ['Alert: 1']
 
 
 # @pytest.mark.skip(reason='Takes too long')
@@ -39,4 +39,4 @@ def test_iASTD_threat_detection() -> None:
             if res is not None:
                 data.append(res)
 
-    assert 'Alert Portscan attack' in data
+    assert any(['Alert Portscan attack' in x for x in data])

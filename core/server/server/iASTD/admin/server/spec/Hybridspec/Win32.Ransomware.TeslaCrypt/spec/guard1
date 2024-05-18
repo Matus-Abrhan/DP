@@ -1,1 +1,0 @@
-(ipdst = ipdst) && (portdst = portdst) && (Functions.contains msg_req "POST") && (Functions.contains msg_req ".php") && (Functions.contains msg_hdr "User-Agent: Mozilla") && (Functions.contains msg_cnt "data=") && not (Functions.contains msg_hdr "Accept") && (Functions.contains msg_hdr "Referer")   
