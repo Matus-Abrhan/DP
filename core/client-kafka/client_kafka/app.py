@@ -57,7 +57,10 @@ class Capture:
             self.id = id
             self.partition = int(partition)
             print(id)
-            print(partition)
+
+        while self.partition not in self.producer.partitions_for(RequestIdentifier.WIN_EVENT.value):
+            pass
+        print(partition)
 
     def unregister(self):
         self.producer.send(RequestIdentifier.UNREGISTER.value,

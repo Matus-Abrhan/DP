@@ -1,7 +1,7 @@
 from kafka import KafkaConsumer, KafkaAdminClient
 from kafka.admin.new_partitions import NewPartitions
 from kafka.admin.new_topic import NewTopic
-from multiprocessing import Process, Queue
+from multiprocessing import Process
 from server.collector import Collector
 from threading import Thread
 import logging
@@ -9,8 +9,8 @@ import socket
 import signal
 import json
 
-from server.general.utils import Encoding, RequestIdentifier, WIN_EVENT_OBJECT
-from server.general.utils import RWQueue, ProcessCommand, CLIENT_ID_BYTES
+from server.general.utils import RequestIdentifier, WIN_EVENT_OBJECT
+from server.general.utils import RWQueue, ProcessCommand
 
 logger = logging.getLogger(__name__)
 
@@ -62,20 +62,21 @@ class KafkaCollectorProcess(Process):
         num_partitions = dict()
         for iden in RequestIdentifier:
             if iden.value not in topic_list:
+                print(f'created topic {iden.value}')
                 kafka_admin.create_topics([
                     NewTopic(iden.value,
                              num_partitions=1,
                              replication_factor=1)
                 ])
-            num_partitions[iden.value] = len(
-                consumer.partitions_for_topic(iden.value))
+            part = consumer.partitions_for_topic(iden.value)
+            if part is not None:
+                num_partitions[iden.value] = len(part)
 
         subscribe_list = [
             RequestIdentifier.WIN_EVENT.value,
             RequestIdentifier.REGISTER.value,
             RequestIdentifier.UNREGISTER.value
         ]
-
         consumer.subscribe(subscribe_list)
 
         def kafka_winevt_loop():
@@ -103,8 +104,7 @@ class KafkaCollectorProcess(Process):
                         ProcessCommand.REGISTER,
                         '#'.join([client_addr, str(num_partitions[topic]-1)])))
                     num_partitions[topic] += 1
-                    # consumer.subscribe(subscribe_list)
-                    # TODO: ensur this is needed
+                    consumer.subscribe(subscribe_list)
                 elif identifier is RequestIdentifier.UNREGISTER:
                     client_id = msg.key.decode('utf-8')
                     self.manager_rw.put((
