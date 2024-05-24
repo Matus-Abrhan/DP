@@ -3,7 +3,6 @@ from multiprocessing import Queue
 from contextlib import contextmanager
 
 from server.manager import Manager
-from server.collector import Collector
 from server.collector_kafka import KafkaCollector
 from server.spec_analysis import RootSpec
 from server.general.utils import translate_spec_type, cleanup_spec_type
@@ -23,7 +22,7 @@ class App:
         translate_spec_type(event_name.value, self.event_def)
         create_global_func_links()
 
-        self.collector = KafkaCollector()  # Collector()
+        self.collector = KafkaCollector()
         self.manager = Manager()
 
     def status(self):
@@ -47,28 +46,10 @@ class App:
                     while events := self.status()['events_pending'] != '0':
                         logger.info(events)
                         pass
-        # cleanup_spec_type()
 
 
 def main() -> None:
     app: App = App()
     with app.cm() as app:
-        try:
-            while True:
-                x = input('> ')
-                if x == 'status':
-                    print(app.status())
-                elif x == 'register':
-                    app.collector_rw.put(
-                        (ProcessCommand.REGISTER, 'localhost'))
-                elif x == 'exit':
-                    break
-                elif x == '?' or x == 'help':
-                    print(
-                        'Options:\n'
-                        'status\n'
-                        'register\n'
-                        'exit\n')
-        except KeyboardInterrupt:
+        while True:
             pass
-    exit(0)

@@ -12,10 +12,13 @@ CLIENT_ID_BYTES = 4
 
 
 class Encoding:
-    def decode(self, msg: bytes) -> str:
+
+    @staticmethod
+    def decode(msg: bytes) -> str:
         return str(msg, encoding='utf-8')
 
-    def encode(self, msg: str) -> bytes:
+    @staticmethod
+    def encode(msg: str) -> bytes:
         return bytes(msg, encoding='utf-8')
 
 
@@ -25,17 +28,15 @@ class EventName(Enum):
 
 class Spec(Enum):
     ROOT = Path('./iASTD/spec/ROOT/root.spec')
-    T1053 = Path('./iASTD/spec/T1053/t1053.spec')
-    T1056 = Path('./iASTD/spec/T1056/t1056.spec')
-    T1059 = Path('./iASTD/spec/T1059/t1059.spec')
-    T1083 = Path('./iASTD/spec/T1083/t1083.spec')
-    T1202 = Path('./iASTD/spec/T1202/t1202.spec')
-    T1222 = Path('./iASTD/spec/T1222/t1222.spec')
-    T1486 = Path('./iASTD/spec/T1486/t1486.spec')
+    # T1053 = Path('./iASTD/spec/T1053/t1053.spec')
+    # T1056 = Path('./iASTD/spec/T1056/t1056.spec')
+    # T1059 = Path('./iASTD/spec/T1059/t1059.spec')
+    # T1083 = Path('./iASTD/spec/T1083/t1083.spec')
+    # T1202 = Path('./iASTD/spec/T1202/t1202.spec')
+    # T1222 = Path('./iASTD/spec/T1222/t1222.spec')
+    # T1486 = Path('./iASTD/spec/T1486/t1486.spec')
     RANSOMWARE = Path('./iASTD/spec/RANSOMWARE/ransomware.spec')
     KEYLOGGER = Path('./iASTD/spec/KEYLOGGER/keylogger.spec')
-    # DUMMY1 = Path('./iASTD/spec/DUMMY1/dummy1.spec')
-    # DUMMY2 = Path('./iASTD/spec/DUMMY2/dummy2.spec')
 
     @classmethod
     def value_of(cls, value):
@@ -51,6 +52,7 @@ class RequestIdentifier(Enum):
     WIN_EVENT = 'winevt'
     REGISTER = 'reg'
     UNREGISTER = 'unreg'
+    RESULT = 'result'
     EXIT = 'exit'
 
     def add_data(cls, data: List[str]) -> str:
@@ -136,6 +138,7 @@ class ProcessCommand(Enum):
     STATUS = 1
     REGISTER = 2
     UNREGISTER = 3
+    RESULT = 4
 
 
 class RWQueue:
@@ -143,10 +146,10 @@ class RWQueue:
         self._r_q: Queue = q1
         self._w_q: Queue = q2
 
-    def put(self, item: Tuple[ProcessCommand, str]) -> None:
+    def put(self, item: Tuple[ProcessCommand, Dict[str, str]]) -> None:
         self._w_q.put(item)
 
-    def get(self) -> Tuple[ProcessCommand, str]:
+    def get(self) -> Tuple[ProcessCommand, Dict[str, str]]:
         return self._r_q.get()
 
     def empty(self) -> bool:

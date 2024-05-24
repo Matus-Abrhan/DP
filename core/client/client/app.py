@@ -45,16 +45,15 @@ class Capture:
 
             data, server = s.recvfrom(1024)
             print("Registered")
-            print(int.from_bytes(data, "big"))
-            self.id = str(int.from_bytes(data, "big"))
+            id = data.decode('utf-8')
+            self.id = id
+            print(id)
 
     def unregister(self):
         with socket(AF_INET, SOCK_DGRAM) as s:
-            # s.bind(('', 9002))
             msg = RequestIdentifier.UNREGISTER.add_data([self.id, ''])
             msg = Encoding.encode(msg)
             s.sendto(msg, (self.ip_addr, self.port))
-
             print("Unregistered")
 
     def send(self):
@@ -73,10 +72,6 @@ class Capture:
                         s.sendto(msg, (self.ip_addr, self.port))
                     except KeyboardInterrupt:
                         break
-        # event_def = dict()
-        # for key in keys:
-        #    event_def[key] = 'string'
-        # print(json.dumps(event_def))
 
     def process_xml(self, xml_event, keys) -> Dict[str, str]:
         event_full = xmltodict.parse(

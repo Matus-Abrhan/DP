@@ -1,7 +1,7 @@
 from typing import Dict, List, Union, Optional
 import logging
 from contextlib import contextmanager
-from time import sleep
+from time import sleep, time
 from multiprocessing import Process, Queue
 from threading import Thread
 import signal
@@ -12,15 +12,6 @@ from server.wrapper.echoShell import echoShell
 from server.general.utils import Spec, ProcessCommand, RWQueue, CLIENT_ID_BYTES
 
 logger = logging.getLogger(__name__)
-
-
-client_logger = logging.getLogger('Client Logger')
-client_logger.setLevel(logging.INFO)
-formatter = logging.Formatter(fmt='%(levelname)s %(asctime)s %(message)s')
-file_handle = logging.FileHandler(f'clients_{random.getrandbits(16)}.log')
-file_handle.setLevel(logging.INFO)
-file_handle.setFormatter(formatter)
-client_logger.addHandler(file_handle)
 
 
 class ManagerProcess(Process):
@@ -58,19 +49,15 @@ class ManagerProcess(Process):
                 self.collector_rw.put((command, data))
 
             elif command == ProcessCommand.REGISTER:
-                ip_addr = data
-                r = random.getrandbits(CLIENT_ID_BYTES*8)
-                _ = self.clients.setdefault(str(r), list())
-                data = '#'.join([str(r), data])
+                id = str(random.getrandbits(CLIENT_ID_BYTES*8))
+                _ = self.clients.setdefault(id, list())
+                data['id'] = id
                 self.collector_rw.put((command, data))
-                client_logger.info(f'Client from {ip_addr} registered as {r}')
 
             elif command == ProcessCommand.UNREGISTER:
-                astd_list = self.clients.pop(data, list())
-                if len(astd_list) > 0:
-                    client_logger.info(f'Client {data} unregistered')
+                id = data['id']
+                astd_list = self.clients.pop(id, list())
                 for astd in astd_list:
-                    client_logger.info(f'{data} stopped {astd.spec}')
                     astd.stop()
 
     def run(self):
@@ -83,12 +70,9 @@ class ManagerProcess(Process):
             while True:
                 (client, event) = self.event_q.get()
                 self.processed_counter += 1
-                # logger.debug(f'read from queue: {(client, event)}')
-                # print(f'read from queue: {(client, event)}')
+                print(time()*1000)
 
                 root_result = self.feed_root(event)
-                # logger.info(root_result)
-                # print(f'Root: {root_result}')
                 if len(root_result) > 0:
                     for result in set(root_result):
                         spec = Spec.value_of(result)
@@ -96,7 +80,6 @@ class ManagerProcess(Process):
                             self.start_iASTD(client, spec)
 
                 self.feed_client(client, event)
-                # print(f'{client}: {client_result}')
 
         self.read_thread = Thread(target=read_loop)
         self.read_thread.start()
@@ -107,7 +90,6 @@ class ManagerProcess(Process):
         client_astds = self.clients.get(client, None)
         if client_astds is not None:
             client_astds.append(iASTD(spec))
-            client_logger.info(f'{client} started {spec}')
 
     def start_echo_shell(self, client: str, spec: Spec) -> None:
         client_astds = self.clients.get(client, None)
@@ -129,17 +111,16 @@ class ManagerProcess(Process):
                     if any('exit' in x.split() for x in instance_result):
                         remove_list.append(idx)
                     result.extend(instance_result)
-            if any([x for x in result]):
-                client_logger.info(f'{client}: {result}')
+                    if len(instance_result) > 0:
+                        self.collector_rw.put((
+                            ProcessCommand.RESULT,
+                            {'id': client,
+                             'msg': f'{astd.spec}: {instance_result}'}))
             if len(remove_list) > 0:
                 remove_list.reverse()
                 for idx in remove_list:
                     astd = astd_list.pop(idx)
                     astd.stop()
-                    client_logger.info(f'{client} stopped {astd.spec}')
-
-                # TODO: check if this assignment is needed
-                # self.clients[client] = astd_list
         return result
 
 

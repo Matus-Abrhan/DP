@@ -11,17 +11,11 @@ logger = logging.getLogger(__name__)
 
 class RootSpec:
     def __init__(self):
-        # self.transitions = list()
-        # self.elements = list()
-        # self.final = list()
         self.automatons = list()
         self.directory = ROOT_DIR / Spec.ROOT.value.parent
         if self.directory.exists():
             shutil.rmtree(self.directory)
         os.mkdir(self.directory)
-        # link_src = ROOT_DIR / './iASTD/spec/global_functions.ml'
-        # link_dst = self.directory / 'global_functions.ml'
-        # os.symlink(link_src, link_dst)
 
     def create(self):
         for spec in Spec:
@@ -98,7 +92,7 @@ def create_automaton(transition: str, tabs: int = 2) -> str:
             '\tn0',
             '\t>'
         ]
-    space = '\n'  # + ('\t'*tabs)
+    space = '\n'
     result = space.join(get_aut(transition))
     return result
 

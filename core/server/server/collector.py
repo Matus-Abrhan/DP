@@ -18,7 +18,6 @@ logger = logging.getLogger(__name__)
 
 class RequestHandler(socketserver.BaseRequestHandler):
     def handle(self) -> None:
-        # logger.debug(f'Handling request {self.request}')
         enc_request: bytes = self.request[0]
         encoding = Encoding()
         request = encoding.decode(enc_request)
@@ -35,7 +34,6 @@ class RequestHandler(socketserver.BaseRequestHandler):
             data_list = json.loads(data)
             event = WIN_EVENT_OBJECT.get_event(data_list)
             if event is not None:
-                # logger.debug(f'writeing to queue: {event}')
                 self.server.event_q.put((client_id, event))
         elif identifier is RequestIdentifier.REGISTER:
             self.server.manager_rw.put((ProcessCommand.REGISTER, client_addr))

@@ -1,5 +1,4 @@
-from kafka import KafkaConsumer, KafkaAdminClient
-from kafka.admin.new_partitions import NewPartitions
+from kafka import KafkaConsumer, KafkaAdminClient, KafkaProducer
 from kafka.admin.new_topic import NewTopic
 from multiprocessing import Process
 from server.collector import Collector
@@ -10,11 +9,11 @@ import signal
 import json
 
 from server.general.utils import RequestIdentifier, WIN_EVENT_OBJECT
-from server.general.utils import RWQueue, ProcessCommand
+from server.general.utils import RWQueue, ProcessCommand, Encoding
 
 logger = logging.getLogger(__name__)
 
-BOOTSTRAP_SERVER = '192.168.122.31:9092'
+BOOTSTRAP_SERVER = '10.110.110.160:9092'
 
 
 class KafkaCollectorProcess(Process):
@@ -26,6 +25,7 @@ class KafkaCollectorProcess(Process):
         self.app_rw: RWQueue = app_rw
 
     def menu(self):
+        self.producer = KafkaProducer(bootstrap_servers=[BOOTSTRAP_SERVER])
         while True:
             command = None
             data = None
@@ -39,10 +39,10 @@ class KafkaCollectorProcess(Process):
                 source = 'app'
 
             if command == ProcessCommand.REGISTER and source == 'manager':
-                id, addr, partition = data.split('#')
+                id = data['id']
+                addr = data['addr']
                 with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
-                    data = '#'.join([id, partition])
-                    s.sendto(bytes(data, 'utf-8'), (addr, 9002))
+                    s.sendto(Encoding.encode(id), (addr, 9002))
             elif command == ProcessCommand.REGISTER and source == 'app':
                 pass
             elif command == ProcessCommand.UNREGISTER and source == 'manager':
@@ -51,6 +51,12 @@ class KafkaCollectorProcess(Process):
                 self.manager_rw.put((command, data))
             elif command == ProcessCommand.STATUS and source == 'manager':
                 self.app_rw.put((command, data))
+            elif command == ProcessCommand.RESULT and source == 'manager':
+                id = data['id']
+                msg = data['msg']
+                self.producer.send(RequestIdentifier.RESULT.value,
+                                   key=Encoding.encode(id),
+                                   value=Encoding.encode(msg))
 
     def run(self):
         signal.signal(signal.SIGINT, signal.SIG_IGN)
@@ -68,48 +74,42 @@ class KafkaCollectorProcess(Process):
                              num_partitions=1,
                              replication_factor=1)
                 ])
-            part = consumer.partitions_for_topic(iden.value)
-            if part is not None:
-                num_partitions[iden.value] = len(part)
+            while True:
+                part = consumer.partitions_for_topic(iden.value)
+                if part is not None:
+                    num_partitions[iden.value] = len(part)
+                    break
 
         subscribe_list = [
             RequestIdentifier.WIN_EVENT.value,
             RequestIdentifier.REGISTER.value,
-            RequestIdentifier.UNREGISTER.value
+            RequestIdentifier.UNREGISTER.value,
+            RequestIdentifier.RESULT.value
         ]
         consumer.subscribe(subscribe_list)
 
-        def kafka_winevt_loop():
+        def kafka_winevt_loop() -> None:
             for msg in consumer:
-                print(msg)
                 identifier: RequestIdentifier = RequestIdentifier(msg.topic)
 
                 if identifier is RequestIdentifier.WIN_EVENT:
-                    client_id = msg.key
-                    try:
-                        (iden, client_id, data) = msg.value.decode(
-                            'utf-8').split('#')
-                    except ValueError:
-                        continue
+                    client_id = Encoding.decode(msg.key)
+                    data = Encoding.decode(msg.value)
                     data_list = json.loads(data)
                     event = WIN_EVENT_OBJECT.get_event(data_list)
                     if event is not None:
                         self.event_q.put((client_id, event))
+
                 elif identifier is RequestIdentifier.REGISTER:
-                    client_addr = msg.key.decode('utf-8')
-                    topic = msg.value.decode('utf-8')
-                    kafka_admin.create_partitions(
-                        {topic: NewPartitions(num_partitions[topic]+1)})
+                    client_addr = Encoding.decode(msg.key)
+
                     self.manager_rw.put((
-                        ProcessCommand.REGISTER,
-                        '#'.join([client_addr, str(num_partitions[topic]-1)])))
-                    num_partitions[topic] += 1
-                    consumer.subscribe(subscribe_list)
+                        ProcessCommand.REGISTER, {'addr': client_addr}))
+
                 elif identifier is RequestIdentifier.UNREGISTER:
-                    client_id = msg.key.decode('utf-8')
+                    client_id = Encoding.decode(msg.key)
                     self.manager_rw.put((
-                        ProcessCommand.UNREGISTER,
-                        client_id))
+                        ProcessCommand.UNREGISTER, {'id': client_id}))
                 elif identifier is RequestIdentifier.RAW:
                     pass
 
@@ -119,7 +119,7 @@ class KafkaCollectorProcess(Process):
         self.menu()
 
     def terminate(self):
-        self.manager_rw.put((ProcessCommand.STOP, ''))
+        self.manager_rw.put((ProcessCommand.STOP, {}))
         super().terminate()
 
 

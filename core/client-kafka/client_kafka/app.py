@@ -47,20 +47,14 @@ class Capture:
             self.producer.send(
                 RequestIdentifier.REGISTER.value,
                 key=bytes(gethostbyname(gethostname()), 'utf-8'),
-                value=bytes(RequestIdentifier.WIN_EVENT.value, 'utf-8'),
+                value=b'',
                 partition=0)
 
             data, server = s.recvfrom(1024)
             print("Registered")
-            data = data.decode('utf-8')
-            id, partition = data.split('#')
+            id = data.decode('utf-8')
             self.id = id
-            self.partition = int(partition)
             print(id)
-
-        while self.partition not in self.producer.partitions_for(RequestIdentifier.WIN_EVENT.value):
-            pass
-        print(partition)
 
     def unregister(self):
         self.producer.send(RequestIdentifier.UNREGISTER.value,
@@ -74,15 +68,13 @@ class Capture:
                 xml_event = event_queue.get()
                 event_dict = self.process_xml(xml_event)
                 event = WIN_EVENT_OBJECT.get_event(event_dict)
-                msg = RequestIdentifier.WIN_EVENT.add_data([self.id, event])
-                msg = Encoding.encode(msg)
+                msg = Encoding.encode(event)
 
-                print(msg)
                 self.producer.send(
                     RequestIdentifier.WIN_EVENT.value,
                     key=bytes(self.id, 'utf-8'),
                     value=msg,
-                    partition=self.partition)
+                    partition=0)
         except KeyboardInterrupt:
             pass
 
